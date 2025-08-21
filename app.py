@@ -5,10 +5,14 @@ def connection():
     password = input("Enter MySQL password: ")    
 
     try:
+        port = int(input("Enter MySQL port number (default 3306): "))
+        if not port:
+            port = 3306
         conn = mysql.connector.connect(
             host='localhost',
             user=username,
             password=password,
+            port=port,
             database='crickstatz'
         )
         if conn.is_connected():
