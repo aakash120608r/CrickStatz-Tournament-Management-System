@@ -21,3 +21,17 @@ try:
         print("Failed to connect to the database.")
 except mysql.connector.Error as err:
     print(f"Error: {err}")
+
+cursor=conn.cursor()
+
+# Initializing the tables
+with open("database.sql", "r") as f:
+    sql_file = f.read()
+
+for statement in sql_file.split(';'):
+    statement = statement.strip()
+    if statement:
+        try:
+            cursor.execute(statement)
+        except Exception as e:
+            print(f"Error executing: {statement}\n{e}")
