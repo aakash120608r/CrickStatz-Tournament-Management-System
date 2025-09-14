@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS venues (
 CREATE TABLE IF NOT EXISTS umpires (
     umpire_id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
-    qualification VARCHAR(255),
+    experience VARCHAR(255),
     PRIMARY KEY (umpire_id)
 ) ENGINE=InnoDB;
 
