@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS team_players (
     player_id INT NOT NULL,
     contract_start DATE,
     contract_end DATE,
-    PRIMARY KEY (team_id, player_id)
+    PRIMARY KEY (team_id, player_id),
     FOREIGN KEY (team_id) REFERENCES teams(team_id) ON DELETE CASCADE,
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 );
