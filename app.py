@@ -59,12 +59,12 @@ def add_team():
 def add_player():
     player_name = input("Enter player name: ")
     age = int(input("Enter player age: "))
-    role = input("Enter player role (Batsman/Bowler/All-rounder/Wicket-keeper): ")
+    role = input("Enter player role (Batsman/Bowler/All-rounder/Wicketkeeper): ")
     batting_style = input("Enter batting style (Right-hand/Left-hand): ")
     bowling_style = input("Enter bowling style (Right-arm/Left-arm/None): ")
 
     try:
-        query= "INSERT INTO players (name, age, role, batting_style, bowling_style) VALUES (%s, %s, %s %s, %s)"
+        query= "INSERT INTO players (name, age, role, batting_style, bowling_style) VALUES (%s, %s, %s, %s, %s)"
         cursor.execute(query, (player_name, age, role, batting_style, bowling_style))
         conn.commit()
     
@@ -115,8 +115,8 @@ def add_player_to_team():
     contract_end = input("Enter contract end date (YYYY-MM-DD): ")
 
     try:
-        query = "INSERT INTO team_players VALUES(%s, %s, %s , %s)"
-        cursor.execute(query, (player_id, team_id, contract_start, contract_end))
+        query = "INSERT INTO team_players (team_id, player_id, contract_start, contract_end) VALUES(%s, %s, %s , %s)"
+        cursor.execute(query, (team_id, player_id, contract_start, contract_end))
         conn.commit()
 
         print("Player added to Team successfully")
@@ -130,15 +130,19 @@ def add_matches():
     team2_id = int(input("Enter Team 2 ID: "))
     venue_id = int(input("Enter Venue ID: "))
     umpire_id = int(input("Enter Umpire ID: "))
-    date = input("Enter match date (YYYY/MM/DD): ")
-    toss_winner = input("Enter Toss Winner (Team 1/Team 2): ")
+    date = input("Enter match date (YYYY-MM-DD): ")
+    toss_winner = int(input("Enter Toss Winner Team ID: "))
     toss_decision = input("Enter Toss Decision (Bat/Bowl): ")
     team_1_score = int(input("Enter Team 1 Score: "))
     team_2_score = int(input("Enter Team 2 Score: "))
     team_1_wickets = int(input("Enter Team 1 Wickets Lost: "))
     team_2_wickets = int(input("Enter Team 2 Wickets Lost: "))
-    match_result = input("Enter Match Result (Team 1/Team 2/Draw): ")
+    match_result = input("Enter Match Result (Team 1/Team 2/Draw & By _ Runs/Wickets): ")
     weather = input("Enter Weather Conditions: ")
+
+    if team1_id == team2_id:
+        print("Error: A team cannot play against itself.")
+        return
 
     try:
         query = """INSERT INTO matches (team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather) 
@@ -152,4 +156,3 @@ def add_matches():
     except mysql.connector.Error as err:
         print(f"Error: {err}")
     print()
-
