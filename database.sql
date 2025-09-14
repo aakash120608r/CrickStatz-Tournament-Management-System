@@ -3,7 +3,7 @@ USE crickstatz;
 
 -- 1. Teams
 CREATE TABLE IF NOT EXISTS teams (
-    team_id INT NOT NULL AUTO_INCREMENT,
+    team_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL UNIQUE,
     captain VARCHAR(255),
     coach VARCHAR(255),
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS teams (
 
 -- 2. Players
 CREATE TABLE IF NOT EXISTS players (
-    player_id INT NOT NULL AUTO_INCREMENT,
+    player_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     age INT,
     role ENUM('Batsman','Bowler','All-rounder','Wicketkeeper') NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS players (
 
 -- 3. Venues
 CREATE TABLE IF NOT EXISTS venues (
-    venue_id INT NOT NULL AUTO_INCREMENT,
+    venue_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255),
     capacity INT,
@@ -33,20 +33,20 @@ CREATE TABLE IF NOT EXISTS venues (
 
 -- 4. Umpires
 CREATE TABLE IF NOT EXISTS umpires (
-    umpire_id INT NOT NULL AUTO_INCREMENT,
+    umpire_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     qualification VARCHAR(255),
     PRIMARY KEY (umpire_id)
 );
 
--- 5. Matches
+-- 5. Matches (depends on Teams + Venues)
 CREATE TABLE IF NOT EXISTS matches (
-    match_id INT NOT NULL AUTO_INCREMENT,
-    team1_id INT NOT NULL,
-    team2_id INT NOT NULL,
-    venue_id INT,
+    match_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    team1_id INT UNSIGNED NOT NULL,
+    team2_id INT UNSIGNED NOT NULL,
+    venue_id INT UNSIGNED,
     date DATE NOT NULL,
-    toss_winner INT,
+    toss_winner INT UNSIGNED,
     match_result VARCHAR(50),
     weather VARCHAR(255),
     PRIMARY KEY (match_id),
@@ -56,10 +56,10 @@ CREATE TABLE IF NOT EXISTS matches (
     FOREIGN KEY (toss_winner) REFERENCES teams(team_id) ON DELETE SET NULL
 );
 
--- 6. Team-Players (depends on Teams & Players)
+-- 6. Team-Players (depends on Teams + Players)
 CREATE TABLE IF NOT EXISTS team_players (
-    team_id INT NOT NULL,
-    player_id INT NOT NULL,
+    team_id INT UNSIGNED NOT NULL,
+    player_id INT UNSIGNED NOT NULL,
     contract_start DATE,
     contract_end DATE,
     PRIMARY KEY (team_id, player_id),
@@ -67,19 +67,19 @@ CREATE TABLE IF NOT EXISTS team_players (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 );
 
--- 7. Match Officials (depends on Matches & Umpires)
+-- 7. Match Officials (depends on Matches + Umpires)
 CREATE TABLE IF NOT EXISTS match_officials (
-    id INT NOT NULL AUTO_INCREMENT,
-    match_id INT NOT NULL,
-    umpire_id INT NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    match_id INT UNSIGNED NOT NULL,
+    umpire_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (match_id) REFERENCES matches(match_id) ON DELETE CASCADE,
     FOREIGN KEY (umpire_id) REFERENCES umpires(umpire_id) ON DELETE CASCADE
 );
 
--- 8. Batting Stats
+-- 8. Batting Stats (depends on Players)
 CREATE TABLE IF NOT EXISTS batting_stats (
-    player_id INT NOT NULL,
+    player_id INT UNSIGNED NOT NULL,
     matches_played INT DEFAULT 0,
     run_scored INT DEFAULT 0,
     balls_faced INT DEFAULT 0,
@@ -93,9 +93,9 @@ CREATE TABLE IF NOT EXISTS batting_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 );
 
--- 9. Bowling Stats
+-- 9. Bowling Stats (depends on Players)
 CREATE TABLE IF NOT EXISTS bowling_stats (
-    player_id INT NOT NULL,
+    player_id INT UNSIGNED NOT NULL,
     matches_played INT DEFAULT 0,
     over_bowled FLOAT DEFAULT 0,
     runs_given INT DEFAULT 0,
@@ -109,9 +109,9 @@ CREATE TABLE IF NOT EXISTS bowling_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 );
 
--- 10. Fielding Stats
+-- 10. Fielding Stats (depends on Players)
 CREATE TABLE IF NOT EXISTS fielding_stats (
-    player_id INT NOT NULL,
+    player_id INT UNSIGNED NOT NULL,
     matches_played INT DEFAULT 0,
     catches INT DEFAULT 0,
     run_outs INT DEFAULT 0,
@@ -120,10 +120,10 @@ CREATE TABLE IF NOT EXISTS fielding_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 );
 
--- 11. Player-Match Stats (depends on Matches & Players)
+-- 11. Player-Match Stats (depends on Matches + Players)
 CREATE TABLE IF NOT EXISTS player_match_stats (
-    match_id INT NOT NULL,
-    player_id INT NOT NULL,
+    match_id INT UNSIGNED NOT NULL,
+    player_id INT UNSIGNED NOT NULL,
     runs_scored INT DEFAULT 0,
     balls_faced INT DEFAULT 0,
     fours INT DEFAULT 0,
