@@ -47,6 +47,11 @@ CREATE TABLE IF NOT EXISTS matches (
     venue_id INT,
     date DATE NOT NULL,
     toss_winner INT,
+    toss_decision ENUM('Bat','Bowl'),
+    team_1_score INT DEFAULT 0,
+    team_2_score INT DEFAULT 0,
+    team_1_wickets INT DEFAULT 0,
+    team_2_wickets INT DEFAULT 0,
     match_result VARCHAR(50),
     weather VARCHAR(255),
     PRIMARY KEY (match_id),
@@ -138,3 +143,4 @@ CREATE TABLE IF NOT EXISTS player_match_stats (
     FOREIGN KEY (match_id) REFERENCES matches(match_id) ON DELETE CASCADE,
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
