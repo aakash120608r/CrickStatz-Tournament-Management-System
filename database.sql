@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS matches (
     team1_id INT NOT NULL,
     team2_id INT NOT NULL,
     venue_id INT,
+    umpire_id INT,
     date DATE NOT NULL,
     toss_winner INT,
     toss_decision ENUM('Bat','Bowl'),
@@ -72,17 +73,7 @@ CREATE TABLE IF NOT EXISTS team_players (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 7. Match Officials (depends on Matches + Umpires)
-CREATE TABLE IF NOT EXISTS match_officials (
-    id INT NOT NULL AUTO_INCREMENT,
-    match_id INT NOT NULL,
-    umpire_id INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (match_id) REFERENCES matches(match_id) ON DELETE CASCADE,
-    FOREIGN KEY (umpire_id) REFERENCES umpires(umpire_id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- 8. Batting Stats (depends on Players)
+-- 7. Batting Stats (depends on Players)
 CREATE TABLE IF NOT EXISTS batting_stats (
     player_id INT NOT NULL,
     matches_played INT DEFAULT 0,
@@ -98,7 +89,7 @@ CREATE TABLE IF NOT EXISTS batting_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 9. Bowling Stats (depends on Players)
+-- 8. Bowling Stats (depends on Players)
 CREATE TABLE IF NOT EXISTS bowling_stats (
     player_id INT NOT NULL,
     matches_played INT DEFAULT 0,
@@ -114,7 +105,7 @@ CREATE TABLE IF NOT EXISTS bowling_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 10. Fielding Stats (depends on Players)
+-- 9. Fielding Stats (depends on Players)
 CREATE TABLE IF NOT EXISTS fielding_stats (
     player_id INT NOT NULL,
     matches_played INT DEFAULT 0,
@@ -125,7 +116,7 @@ CREATE TABLE IF NOT EXISTS fielding_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 11. Player-Match Stats (depends on Matches + Players)
+-- 10. Player-Match Stats (depends on Matches + Players)
 CREATE TABLE IF NOT EXISTS player_match_stats (
     match_id INT NOT NULL,
     player_id INT NOT NULL,
