@@ -1,4 +1,6 @@
 import mysql.connector
+import pandas as pd
+from prettytable import PrettyTable
 
 try:
     username = input("Enter MySQL username: ")
@@ -198,4 +200,41 @@ def add_player_stats():
     except mysql.connector.Error as err:
         conn.rollback()
         print(f"Error: {err}")
+    print()
+
+
+def view_teams():
+    cursor.execute('SELECT * FROM teams')
+    rows = cursor.fetchall()
+    table = PrettyTable(['ID', 'Name', 'Captain', 'Coach', 'Home Ground'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
+
+def view_players():
+    cursor.execute('SELECT * FROM players')
+    rows = cursor.fetchall()
+    table = PrettyTable(['ID', 'Name', 'Age', 'Role', 'Batting Style', 'Bowling Style'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
+
+def view_venues():
+    cursor.execute('SELECT * FROM venues')
+    rows = cursor.fetchall()
+    table = PrettyTable(['ID', 'Name', 'Location', 'Capacity'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
+
+def view_umpires():
+    cursor.execute('SELECT * FROM umpires')
+    rows = cursor.fetchall()
+    table = PrettyTable(['ID', 'Name', 'Experience (Years)'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
     print()
