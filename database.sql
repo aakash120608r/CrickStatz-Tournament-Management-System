@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS matches (
     FOREIGN KEY (team1_id) REFERENCES teams(team_id) ON DELETE CASCADE,
     FOREIGN KEY (team2_id) REFERENCES teams(team_id) ON DELETE CASCADE,
     FOREIGN KEY (venue_id) REFERENCES venues(venue_id) ON DELETE SET NULL,
-    FOREIGN KEY (umpire_id) REFERENCES umpires(umpire_id) ON DELETE SET NULL
+    FOREIGN KEY (umpire_id) REFERENCES umpires(umpire_id) ON DELETE SET NULL,
     FOREIGN KEY (toss_winner) REFERENCES teams(team_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
