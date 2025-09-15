@@ -74,14 +74,13 @@ CREATE TABLE IF NOT EXISTS team_players (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 7. Batting Stats (depends on Players)
+-- 7. Batting Stats
 CREATE TABLE IF NOT EXISTS batting_stats (
     player_id INT NOT NULL,
     matches_played INT DEFAULT 0,
-    run_scored INT DEFAULT 0,
+    runs_scored INT DEFAULT 0,
     balls_faced INT DEFAULT 0,
-    dot_balls INT DEFAULT 0,
-    strike_rate FLOAT GENERATED ALWAYS AS ((run_scored / NULLIF(balls_faced, 0)) * 100) STORED,
+    strike_rate FLOAT GENERATED ALWAYS AS ((runs_scored / NULLIF(balls_faced, 0)) * 100) STORED,
     fours INT DEFAULT 0,
     sixes INT DEFAULT 0,
     fifties INT DEFAULT 0,
@@ -90,23 +89,19 @@ CREATE TABLE IF NOT EXISTS batting_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 8. Bowling Stats (depends on Players)
+-- 8. Bowling Stats
 CREATE TABLE IF NOT EXISTS bowling_stats (
     player_id INT NOT NULL,
     matches_played INT DEFAULT 0,
-    over_bowled FLOAT DEFAULT 0,
-    runs_given INT DEFAULT 0,
-    economy FLOAT GENERATED ALWAYS AS (runs_given / NULLIF(over_bowled, 0)) STORED,
-    fours INT DEFAULT 0,
-    sixes INT DEFAULT 0,
+    overs_bowled FLOAT DEFAULT 0,
+    runs_conceded INT DEFAULT 0,
+    economy FLOAT GENERATED ALWAYS AS (runs_conceded / NULLIF(overs_bowled, 0)) STORED,
     wickets INT DEFAULT 0,
-    wides INT DEFAULT 0,
-    no_balls INT DEFAULT 0,
     PRIMARY KEY (player_id),
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 9. Fielding Stats (depends on Players)
+-- 9. Fielding Stats
 CREATE TABLE IF NOT EXISTS fielding_stats (
     player_id INT NOT NULL,
     matches_played INT DEFAULT 0,
@@ -117,7 +112,7 @@ CREATE TABLE IF NOT EXISTS fielding_stats (
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 10. Player-Match Stats (depends on Matches + Players)
+-- 10. Player-Match Stats
 CREATE TABLE IF NOT EXISTS player_match_stats (
     match_id INT NOT NULL,
     player_id INT NOT NULL,
@@ -125,14 +120,13 @@ CREATE TABLE IF NOT EXISTS player_match_stats (
     balls_faced INT DEFAULT 0,
     fours INT DEFAULT 0,
     sixes INT DEFAULT 0,
-    wickets_taken INT DEFAULT 0,
+    wickets INT DEFAULT 0,
     overs_bowled FLOAT DEFAULT 0,
     runs_conceded INT DEFAULT 0,
     catches INT DEFAULT 0,
     run_outs INT DEFAULT 0,
-    stumping INT DEFAULT 0,
+    stumpings INT DEFAULT 0,
     PRIMARY KEY (match_id, player_id),
     FOREIGN KEY (match_id) REFERENCES matches(match_id) ON DELETE CASCADE,
     FOREIGN KEY (player_id) REFERENCES players(player_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
-
