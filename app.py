@@ -115,7 +115,7 @@ def add_player_to_team():
     contract_end = input("Enter contract end date (YYYY-MM-DD): ")
 
     try:
-        query = "INSERT INTO team_players (team_id, player_id, contract_start, contract_end) VALUES(%s, %s, %s , %s)"
+        query = "INSERT INTO team_players (team_id, player_id, contract_start, contract_end) VALUES(%s, %s, %s, %s)"
         cursor.execute(query, (team_id, player_id, contract_start, contract_end))
         conn.commit()
 
@@ -125,34 +125,77 @@ def add_player_to_team():
         print(f"Error: {err}")
     print()
 
-def add_matches():
-    team1_id = int(input("Enter Team 1 ID: "))
-    team2_id = int(input("Enter Team 2 ID: "))
-    venue_id = int(input("Enter Venue ID: "))
-    umpire_id = int(input("Enter Umpire ID: "))
-    date = input("Enter match date (YYYY-MM-DD): ")
-    toss_winner = int(input("Enter Toss Winner Team ID: "))
-    toss_decision = input("Enter Toss Decision (Bat/Bowl): ")
-    team_1_score = int(input("Enter Team 1 Score: "))
-    team_2_score = int(input("Enter Team 2 Score: "))
-    team_1_wickets = int(input("Enter Team 1 Wickets Lost: "))
-    team_2_wickets = int(input("Enter Team 2 Wickets Lost: "))
-    match_result = input("Enter Match Result (Team 1/Team 2/Draw & By _ Runs/Wickets): ")
-    weather = input("Enter Weather Conditions: ")
+def add_player_stats():
+    player_id = int(input("Enter Player ID: "))
+    match_id = int(input("Enter Match ID: "))
+    # batting stats
+    runs_scored = int(input("Enter Runs Scored: "))
+    balls_faced = int(input("Enter Balls Faced: "))
+    fours = int(input("Enter Number of Fours: "))
+    sixes = int(input("Enter Number of Sixes: "))
+    # bowling stats
+    overs_bowled = float(input("Enter Overs Bowled: "))
+    runs_conceded = int(input("Enter Runs Conceded: "))
+    wickets = int(input("Enter Wickets Taken: "))
+    # fielding stats
+    catches = int(input("Enter No.of Catches Taken: "))
+    run_outs = int(input("Enter No.of Run Outs Made: "))
+    stumpings = int(input("Enter No.of Stumpings Made: "))
 
-    if team1_id == team2_id:
-        print("Error: A team cannot play against itself.")
-        return
+    matches_played = 1
+    fifties = 1 if 50 <= runs_scored < 100 else 0
+    hundreds = 1 if runs_scored >= 100 else 0
 
     try:
-        query = """INSERT INTO matches (team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather) 
-                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-        cursor.execute(query, (team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather))
-        conn.commit()
+        conn.start_transaction()
 
-        print("Match added successfully.")
-        print("Your Match ID is:", cursor.lastrowid)
+        # Insert into player_match_stats
+        cursor.execute("""
+            INSERT INTO player_match_stats 
+            (player_id, match_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings) 
+            VALUES (%s , %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (player_id, match_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings))
+
+        # Update batting stats
+        cursor.execute("""
+            INSERT INTO batting_stats (player_id, matches_played, runs_scored, balls_faced, fours, sixes, fifties, hundreds)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                matches_played = matches_played + VALUES(matches_played),
+                runs_scored = runs_scored + VALUES(runs_scored),
+                balls_faced = balls_faced + VALUES(balls_faced),
+                fours = fours + VALUES(fours),
+                sixes = sixes + VALUES(sixes),
+                fifties = fifties + VALUES(fifties),
+                hundreds = hundreds + VALUES(hundreds)
+        """, (player_id, matches_played, runs_scored, balls_faced, fours, sixes, fifties, hundreds))
+
+        # Update bowling stats
+        cursor.execute("""
+            INSERT INTO bowling_stats (player_id, matches_played, overs_bowled, runs_conceded, wickets)
+            VALUES (%s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                matches_played = matches_played + VALUES(matches_played),
+                overs_bowled = overs_bowled + VALUES(overs_bowled),
+                runs_conceded = runs_conceded + VALUES(runs_conceded),
+                wickets = wickets + VALUES(wickets)
+        """, (player_id, matches_played, overs_bowled, runs_conceded, wickets))
+
+        # Update fielding stats
+        cursor.execute("""
+            INSERT INTO fielding_stats (player_id, matches_played, catches, run_outs, stumpings)
+            VALUES (%s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                matches_played = matches_played + VALUES(matches_played),
+                catches = catches + VALUES(catches),
+                run_outs = run_outs + VALUES(run_outs),
+                stumpings = stumpings + VALUES(stumpings)
+        """, (player_id, matches_played, catches, run_outs, stumpings))
+
+        conn.commit()
+        print("Player stats added and cumulative stats updated successfully.")
 
     except mysql.connector.Error as err:
+        conn.rollback()
         print(f"Error: {err}")
     print()
