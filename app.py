@@ -14,16 +14,14 @@ print()
 try:
     username = input("Enter MySQL username: ")
     password = input("Enter MySQL password: ")    
-    port = int(input("Enter MySQL port number (default 3306): "))
-    if not port:
-        port = 3306
+    port_input = input('Enter port  (Default 3306): ')
+    port = int(port_input) if port_input else 3306
 
     conn = mysql.connector.connect(
         host='localhost',
         user=username,
         password=password,
         port=port,
-        database='crickstatz',
         auth_plugin='mysql_native_password'
         )
     if conn.is_connected():
