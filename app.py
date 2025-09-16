@@ -11,25 +11,38 @@ print(Fore.BLUE + pyfiglet.figlet_format("CrickStatz"), Fore.CYAN + "Cricket Tou
 print()
 print()
 
-try:
-    username = input("Enter MySQL username: ")
-    password = input("Enter MySQL password: ")    
-    port_input = input('Enter port  (Default 3306): ')
-    port = int(port_input) if port_input else 3306
+while True:
+    try:
+        print(Style.BRIGHT + Fore.YELLOW + "Database Connection")
+        print("Please enter your MySQL credentials to connect to the database.")
+        username = input("Enter MySQL username: ")
+        password = input("Enter MySQL password: ")    
+        port_input = input('Enter port  (Default 3306): ')
+        port = int(port_input) if port_input else 3306
 
-    conn = mysql.connector.connect(
-        host='localhost',
-        user=username,
-        password=password,
-        port=port,
-        auth_plugin='mysql_native_password'
-        )
-    if conn.is_connected():
-        print("Connected to CrickStatz database successfully.")
-    else:
-        print("Failed to connect to the database.")
-except mysql.connector.Error as err:
-    print(f"Error: {err}")
+        conn = mysql.connector.connect(
+            host='localhost',
+            user=username,
+            password=password,
+            port=port,
+            auth_plugin='mysql_native_password'
+            )
+        if conn.is_connected():
+            print("✅ Connected to CrickStatz database successfully.")
+            print()
+            break
+        else:
+            print("❌ Failed to connect to the database.")
+            print("Please check your credentials and try again.")
+            print()
+            continue
+
+    except mysql.connector.Error as err:
+        print("❌ Failed to connect to the database.")
+        print(f"Error: {err}")
+        print("Please check your credentials and try again.")
+        print()
+        continue
 
 cursor=conn.cursor()
 
@@ -46,6 +59,114 @@ for statement in sql_file.split(';'):
             print(f"Error executing: {statement}\n{e}")
 
 print()
+
+def main_menu():
+    print("===MAIN MENU===")
+    print("1. Add Records")
+    print("2. View Records")
+    print("3. Export Data to CSV")
+    print("4. Exit")
+    choice = input("Enter your choice (1-4): ")
+
+    if choice == '1':
+        print("---ADD RECORDS---")
+        print("a. Add Team")
+        print("b. Add Player")
+        print("c. Add Venue")
+        print("d. Add Umpire")
+        print("e. Add Player to Team")
+        print("f. Add Match")
+        print("g. Add Player Stats")
+        sub_choice = input("Enter your choice (a-g): ").lower()
+
+        if sub_choice == 'a':
+            add_team()
+        elif sub_choice == 'b':
+            add_player()
+        elif sub_choice == 'c':
+            add_venue()
+        elif sub_choice == 'd':
+            add_umpire()
+        elif sub_choice == 'e':
+            add_player_to_team()
+        elif sub_choice == 'f':
+            add_matches()
+        elif sub_choice == 'g':
+            add_player_stats()
+        else:
+            print("Invalid choice. Please try again.")
+    elif choice == '2':
+        print("---VIEW RECORDS---")
+        print("a. View Teams")
+        print("b. View Players")
+        print("c. View Venues")
+        print("d. View Umpires")
+        print("e. View Matches")
+        print("f. View Batting Stats")
+        print("g. View Bowling Stats")
+        print("h. View Fielding Stats")
+        print("i. View Player Match Stats")
+        sub_choice = input("Enter your choice (a-i): ").lower()
+
+        if sub_choice == 'a':
+            view_teams()
+        elif sub_choice == 'b':
+            view_players()
+        elif sub_choice == 'c':
+            view_venues()
+        elif sub_choice == 'd':
+            view_umpires()
+        elif sub_choice == 'e':
+            view_matches()
+        elif sub_choice == 'f':
+            view_batting_stats()
+        elif sub_choice == 'g':
+            view_bowling_stats()
+        elif sub_choice == 'h':
+            view_fielding_stats()
+        elif sub_choice == 'i':
+            view_player_match_stats()
+        else:
+            print("Invalid choice. Please try again.")
+    
+    elif choice == '3':
+        print("---EXPORT DATA TO CSV---")
+        print("a. Export Teams")
+        print("b. Export Players")
+        print("c. Export Venues")
+        print("d. Export Umpires")
+        print("e. Export Matches")
+        print("f. Export Batting Stats")
+        print("g. Export Bowling Stats")
+        print("h. Export Fielding Stats")
+        print("i. Export Player Match Stats")
+        sub_choice = input("Enter your choice (a-i): ").lower()
+
+        if sub_choice == 'a':
+            export_data('teams')
+        elif sub_choice == 'b':
+            export_data('players')
+        elif sub_choice == 'c':
+            export_data('venues')
+        elif sub_choice == 'd':
+            export_data('umpires')
+        elif sub_choice == 'e':
+            export_data('matches')
+        elif sub_choice == 'f':
+            export_data('batting_stats')
+        elif sub_choice == 'g':
+            export_data('bowling_stats')
+        elif sub_choice == 'h':
+            export_data('fielding_stats')
+        elif sub_choice == 'i':
+            export_data('player_match_stats')
+        else:
+            print("Invalid choice. Please try again.")
+    elif choice == '4':
+        print("Exiting the program. Goodbye!")
+        cursor.close()
+        conn.close()
+        exit()
 
 def add_team():
     team_name = input("Enter team name: ")
@@ -337,3 +458,7 @@ def export_data(tablename):
     df = pd.DataFrame(rows, columns=columns)
     df.to_csv(f'export/{tablename}.csv', index=False)
     print(f"Data exported to {tablename}.csv successfully.\n Please check the 'export' folder.")
+
+while True:
+    main_menu()
+    print()
