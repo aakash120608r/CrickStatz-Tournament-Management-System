@@ -2,6 +2,14 @@ import mysql.connector
 import pandas as pd
 from prettytable import PrettyTable
 import os
+from colorama import Fore, Back, Style, init
+import pyfiglet
+
+init(autoreset=True)
+
+print(Fore.BLUE + pyfiglet.figlet_format("CrickStatz"), Fore.CYAN + "Cricket Tournament Management System!",sep = '\n')
+print()
+print()
 
 try:
     username = input("Enter MySQL username: ")
