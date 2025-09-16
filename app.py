@@ -1,6 +1,7 @@
 import mysql.connector
 import pandas as pd
 from prettytable import PrettyTable
+import os
 
 try:
     username = input("Enter MySQL username: ")
@@ -320,3 +321,13 @@ def view_player_match_stats():
         table.add_row(row)
     print(table)
     print()
+
+def export_data(tablename):
+    cursor.execute(f'SELECT * FROM {tablename}')
+    rows = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+
+    os.makedirs('export', exist_ok=True)
+    df = pd.DataFrame(rows, columns=columns)
+    df.to_csv(f'export/{tablename}.csv', index=False)
+    print(f"Data exported to {tablename}.csv successfully.\n Please check the 'export' folder.")
