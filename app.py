@@ -275,3 +275,48 @@ def view_umpires():
         table.add_row(row)
     print(table)
     print()
+
+def view_matches():
+    cursor.execute('SELECT * FROM matches')
+    rows = cursor.fetchall()
+    table = PrettyTable(['Match ID', 'Team 1 ID', 'Team 2 ID', 'Venue ID', 'Umpire ID', 'Date', 'Toss Winner', 'Toss Decision', 'Team 1 Score', 'Team 2 Score', 'Team 1 Wickets', 'Team 2 Wickets', 'Match Result', 'Weather'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
+
+def view_batting_stats():
+    cursor.execute('SELECT * FROM batting_stats')
+    rows = cursor.fetchall()
+    table = PrettyTable(['Player ID', 'Matches Played', 'Runs Scored', 'Balls Faced', 'Strike Rate', 'Fours', 'Sixes', 'Fifties', 'Hundreds'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
+
+def view_bowling_stats():
+    cursor.execute('SELECT * FROM bowling_stats')
+    rows = cursor.fetchall()
+    table = PrettyTable(['Player ID', 'Matches Played', 'Overs Bowled', 'Runs Conceded', 'Economy', 'Wickets Taken'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
+
+def view_fielding_stats():
+    cursor.execute('SELECT * FROM fielding_stats')
+    rows = cursor.fetchall()
+    table = PrettyTable(['Player ID', 'Matches Played', 'Catches', 'Run Outs', 'Stumpings'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
+
+def view_player_match_stats():
+    cursor.execute('SELECT * FROM player_match_stats')
+    rows = cursor.fetchall()
+    table = PrettyTable(['Player ID', 'Match ID', 'Runs Scored', 'Balls Faced', 'Fours', 'Sixes', 'Wickets Taken', 'Overs Bowled', 'Runs Conceded', 'Catches', 'Run Outs', 'Stumpings'])
+    for row in rows:    
+        table.add_row(row)
+    print(table)
+    print()
