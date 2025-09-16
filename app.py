@@ -55,6 +55,7 @@ def add_team():
         print("Your Team ID is:", cursor.lastrowid)
         
     except mysql.connector.Error as err:
+        conn.rollback()
         print(f"Error: {err}")
     print()
 
@@ -74,7 +75,7 @@ def add_player():
         print("Your Player ID is:", cursor.lastrowid)
     
     except mysql.connector.Error as err:
-        cursor.rollback()
+        conn.rollback()
         print(f"Error: {err}")
     print()
 
@@ -92,7 +93,7 @@ def add_venue():
         print("Your Venue ID is:", cursor.lastrowid)
     
     except mysql.connector.Error as err:
-        cursor.rollback()
+        conn.rollback()
         print(f"Error: {err}")
     print()
 
@@ -109,7 +110,7 @@ def add_umpire():
         print("Your Umpire ID is:", cursor.lastrowid)
     
     except mysql.connector.Error as err:
-        cursor.rollback()
+        conn.rollback()
         print(f"Error: {err}")
     print()
 
@@ -127,7 +128,7 @@ def add_player_to_team():
         print("Player added to Team successfully")
     
     except mysql.connector.Error as err:
-        cursor.rollback()
+        conn.rollback()
         print(f"Error: {err}")
     print()
 
@@ -159,7 +160,7 @@ def add_matches():
         print("Your Match ID is:", cursor.lastrowid)
 
     except mysql.connector.Error as err:
-        conn.rollback()
+        conn.rollback()()
         print(f"Error: {err}")
     print()
 
@@ -274,10 +275,3 @@ def view_umpires():
         table.add_row(row)
     print(table)
     print()
-
-
-add_team()
-add_player()
-add_venue()
-add_umpire()
-add_matches()
