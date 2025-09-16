@@ -74,6 +74,7 @@ def add_player():
         print("Your Player ID is:", cursor.lastrowid)
     
     except mysql.connector.Error as err:
+        cursor.rollback()
         print(f"Error: {err}")
     print()
 
@@ -91,6 +92,7 @@ def add_venue():
         print("Your Venue ID is:", cursor.lastrowid)
     
     except mysql.connector.Error as err:
+        cursor.rollback()
         print(f"Error: {err}")
     print()
 
@@ -107,6 +109,7 @@ def add_umpire():
         print("Your Umpire ID is:", cursor.lastrowid)
     
     except mysql.connector.Error as err:
+        cursor.rollback()
         print(f"Error: {err}")
     print()
 
@@ -124,6 +127,39 @@ def add_player_to_team():
         print("Player added to Team successfully")
     
     except mysql.connector.Error as err:
+        cursor.rollback()
+        print(f"Error: {err}")
+    print()
+
+def add_matches():
+    team1_id = int(input("Enter Team 1 ID: "))
+    team2_id = int(input("Enter Team 2 ID: "))
+    venue_id = int(input("Enter Venue ID: "))
+    umpire_id = int(input("Enter Umpire ID: "))
+    date = input("Enter match date (YYYY-MM-DD): ")
+    toss_winner = int(input("Enter Toss Winner Team ID: "))
+    toss_decision = input("Enter Toss Decision (Bat/Bowl): ")
+    team_1_score = int(input("Enter Team 1 Score: "))
+    team_2_score = int(input("Enter Team 2 Score: "))
+    team_1_wickets = int(input("Enter Team 1 Wickets Lost: "))
+    team_2_wickets = int(input("Enter Team 2 Wickets Lost: "))
+    match_result = input("Enter Match Result (Team 1/Team 2/Draw & By _ Runs/Wickets): ")
+    weather = input("Enter Weather Conditions: ")
+
+    if team1_id == team2_id:
+        print("Error: A team cannot play against itself.")
+        return
+    try:
+        query = """INSERT INTO matches (team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather) 
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        cursor.execute(query, (team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather))
+        conn.commit()
+
+        print("Match added successfully.")
+        print("Your Match ID is:", cursor.lastrowid)
+
+    except mysql.connector.Error as err:
+        conn.rollback()
         print(f"Error: {err}")
     print()
 
@@ -238,3 +274,10 @@ def view_umpires():
         table.add_row(row)
     print(table)
     print()
+
+
+add_team()
+add_player()
+add_venue()
+add_umpire()
+add_matches()
