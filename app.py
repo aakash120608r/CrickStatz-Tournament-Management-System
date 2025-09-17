@@ -13,11 +13,12 @@ print()
 
 while True:
     try:
-        print(Style.BRIGHT + Fore.YELLOW + "Database Connection")
-        print("Please enter your MySQL credentials to connect to the database.")
-        username = input("Enter MySQL username: ")
-        password = input("Enter MySQL password: ")    
-        port_input = input('Enter port  (Default 3306): ')
+        print(Fore.YELLOW + Style.BRIGHT + "=== DATABASE CONNECTION ===")
+        print(Fore.WHITE + "Please enter your MySQL credentials to connect to the database.")
+        print()
+        username = input(Fore.WHITE + "Enter MySQL username: " + Fore.WHITE)
+        password = input(Fore.WHITE + "Enter MySQL password: " + Fore.WHITE)
+        port_input = input(Fore.WHITE + 'Enter port (Default 3306): ' + Fore.WHITE)
         port = int(port_input) if port_input else 3306
 
         conn = mysql.connector.connect(
@@ -28,25 +29,27 @@ while True:
             auth_plugin='mysql_native_password'
             )
         if conn.is_connected():
-            print("✅ Connected to CrickStatz database successfully.")
+            print(Fore.GREEN + Style.BRIGHT + "✅ Connected to CrickStatz database successfully.")
             print()
             break
         else:
-            print("❌ Failed to connect to the database.")
-            print("Please check your credentials and try again.")
+            print(Fore.RED + Style.BRIGHT + "❌ Failed to connect to the database.")
+            print(Fore.RED + "Please check your credentials and try again.")
             print()
             continue
 
     except mysql.connector.Error as err:
-        print("❌ Failed to connect to the database.")
-        print(f"Error: {err}")
-        print("Please check your credentials and try again.")
+        print(Fore.RED + Style.BRIGHT + "❌ Failed to connect to the database.")
+        print(Fore.RED + f"Error: {err}")
+        print(Fore.RED + "Please check your credentials and try again.")
         print()
         continue
 
 cursor=conn.cursor()
 
-# Initializing the tables
+print()
+print(Fore.YELLOW + "Initializing database tables...")
+
 with open("database.sql", "r") as f:
     sql_file = f.read()
 
@@ -56,29 +59,38 @@ for statement in sql_file.split(';'):
         try:
             cursor.execute(statement)
         except Exception as e:
-            print(f"Error executing: {statement}\n{e}")
-
+            print(Fore.RED + f"Error executing: {statement}\n{e}")
+            print()
+print(Fore.GREEN + "Database initialization complete!")
 print()
 
 def main_menu():
-    print("===MAIN MENU===")
-    print("1. Add Records")
-    print("2. View Records")
-    print("3. Export Data to CSV")
-    print("4. Predict Scores")
-    print("5. Exit")
-    choice = input("Enter your choice (1-4): ")
+    print()
+    print(Fore.BLUE + Style.BRIGHT + "=" * 30)
+    print(Fore.BLUE + Style.BRIGHT + "          MAIN MENU")
+    print(Fore.BLUE + Style.BRIGHT + "=" * 30)
+    print()
+    print(Fore.CYAN + "1. Add Records")
+    print(Fore.CYAN + "2. View Records")
+    print(Fore.CYAN + "3. Export Data to CSV")
+    print(Fore.CYAN + "4. Predict Scores")
+    print(Fore.RED + "5. Exit")
+    print()
+    choice = input(Fore.WHITE + "Enter your choice (1-5): " + Fore.WHITE)
+    print()
 
     if choice == '1':
-        print("---ADD RECORDS---")
-        print("a. Add Team")
-        print("b. Add Player")
-        print("c. Add Venue")
-        print("d. Add Umpire")
-        print("e. Add Player to Team")
-        print("f. Add Match")
-        print("g. Add Player Stats")
-        sub_choice = input("Enter your choice (a-g): ").lower()
+        print(Fore.YELLOW + Style.BRIGHT + "--- ADD RECORDS ---")
+        print()
+        print(Fore.CYAN + "a. Add Team")
+        print(Fore.CYAN + "b. Add Player")
+        print(Fore.CYAN + "c. Add Venue")
+        print(Fore.CYAN + "d. Add Umpire")
+        print(Fore.CYAN + "e. Add Player to Team")
+        print(Fore.CYAN + "f. Add Match")
+        print(Fore.CYAN + "g. Add Player Stats")
+        print()
+        sub_choice = input(Fore.WHITE + "Enter your choice (a-g): " + Fore.WHITE).lower()
 
         if sub_choice == 'a':
             add_team()
@@ -98,18 +110,20 @@ def main_menu():
             print("Invalid choice. Please try again.")
 
     elif choice == '2':
-        print("---VIEW RECORDS---")
-        print("a. View Teams")
-        print("b. View Players")
-        print("c. View Venues")
-        print("d. View Umpires")
-        print("e. View Matches")
-        print("f. View Batting Stats")
-        print("g. View Bowling Stats")
-        print("h. View Fielding Stats")
-        print("i. View Player Match Stats")
-        sub_choice = input("Enter your choice (a-i): ").lower()
-
+        print(Fore.YELLOW + Style.BRIGHT + "--- VIEW RECORDS ---")
+        print()
+        print(Fore.CYAN + "a. View Teams")
+        print(Fore.CYAN + "b. View Players")
+        print(Fore.CYAN + "c. View Venues")
+        print(Fore.CYAN + "d. View Umpires")
+        print(Fore.CYAN + "e. View Matches")
+        print(Fore.CYAN + "f. View Batting Stats")
+        print(Fore.CYAN + "g. View Bowling Stats")
+        print(Fore.CYAN + "h. View Fielding Stats")
+        print(Fore.CYAN + "i. View Player Match Stats")
+        print()
+        sub_choice = input(Fore.WHITE + "Enter your choice (a-i): " + Fore.WHITE).lower()
+        print()
         if sub_choice == 'a':
             view_teams()
         elif sub_choice == 'b':
@@ -129,21 +143,22 @@ def main_menu():
         elif sub_choice == 'i':
             view_player_match_stats()
         else:
-            print("Invalid choice. Please try again.")
-    
+            print(Fore.RED + "Invalid choice. Please try again.")
     elif choice == '3':
-        print("---EXPORT DATA TO CSV---")
-        print("a. Export Teams")
-        print("b. Export Players")
-        print("c. Export Venues")
-        print("d. Export Umpires")
-        print("e. Export Matches")
-        print("f. Export Batting Stats")
-        print("g. Export Bowling Stats")
-        print("h. Export Fielding Stats")
-        print("i. Export Player Match Stats")
-        sub_choice = input("Enter your choice (a-i): ").lower()
-
+        print(Fore.YELLOW + Style.BRIGHT + "--- EXPORT DATA TO CSV ---")
+        print()
+        print(Fore.CYAN + "a. Export Teams")
+        print(Fore.CYAN + "b. Export Players")
+        print(Fore.CYAN + "c. Export Venues")
+        print(Fore.CYAN + "d. Export Umpires")
+        print(Fore.CYAN + "e. Export Matches")
+        print(Fore.CYAN + "f. Export Batting Stats")
+        print(Fore.CYAN + "g. Export Bowling Stats")
+        print(Fore.CYAN + "h. Export Fielding Stats")
+        print(Fore.CYAN + "i. Export Player Match Stats")
+        print()
+        sub_choice = input(Fore.WHITE + "Enter your choice (a-i): " + Fore.WHITE).lower()
+        print()
         if sub_choice == 'a':
             export_data('teams')
         elif sub_choice == 'b':
@@ -163,167 +178,197 @@ def main_menu():
         elif sub_choice == 'i':
             export_data('player_match_stats')
         else:
-            print("Invalid choice. Please try again.")
-
+            print(Fore.RED + "Invalid choice. Please try again.")
     elif choice == '4':
-        print("---PREDICT SCORES---")
-        print("a. Predict Player Score")
-        print("b. Predict Team Score")
-        sub_choice = input("Enter your choice (a-b): ").lower()
-
+        print(Fore.YELLOW + Style.BRIGHT + "--- PREDICT SCORES ---")
+        print()
+        print(Fore.CYAN + "a. Predict Player Score")
+        print(Fore.CYAN + "b. Predict Team Score")
+        print()
+        sub_choice = input(Fore.WHITE + "Enter your choice (a-b): " + Fore.WHITE).lower()
+        print()
         if sub_choice == 'a':
             predict_player_score()
         elif sub_choice == 'b':
             predict_team_score()
         else:
-            print("Invalid choice. Please try again.")
-
+            print(Fore.RED + "Invalid choice. Please try again.")
     elif choice == '5':
-        print("Exiting the program. Goodbye!")
+        print(Fore.GREEN + Style.BRIGHT + "Thank you for using CrickStatz!")
+        print(Fore.GREEN + "Exiting the program. Goodbye!")
         cursor.close()
         conn.close()
         exit()
+    else:
+        print(Fore.RED + "Invalid choice. Please try again.")
 
 def add_team():
-    team_name = input("Enter team name: ")
-    captain_name = input("Enter captain name: ")
-    coach_name = input("Enter coach name: ")
-    home_ground = input("Enter home ground: ")
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD TEAM ---")
+
+    team_name = input(Fore.WHITE + "Enter team name: " + Fore.WHITE)
+    captain_name = input(Fore.WHITE + "Enter captain name: " + Fore.WHITE)
+    coach_name = input(Fore.WHITE + "Enter coach name: " + Fore.WHITE)
+    home_ground = input(Fore.WHITE + "Enter home ground: " + Fore.WHITE)
     
     try:
         query = "INSERT INTO teams (name, captain, coach, home_ground) VALUES (%s, %s, %s, %s)"
         cursor.execute(query, (team_name, captain_name, coach_name, home_ground))
         conn.commit()
 
-        print("Team added successfully.")
-        print("Your Team ID is:", cursor.lastrowid)
-        
+        print(Fore.GREEN + Style.BRIGHT + "✅ Team added successfully!")
+        print(Fore.GREEN + f"Team ID: {cursor.lastrowid}")
+
     except mysql.connector.Error as err:
         conn.rollback()
-        print(f"Error: {err}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Error: {err}")
+
     print()
 
 def add_player():
-    player_name = input("Enter player name: ")
-    age = int(input("Enter player age: "))
-    role = input("Enter player role (Batsman/Bowler/All-rounder/Wicketkeeper): ")
-    batting_style = input("Enter batting style (Right-hand/Left-hand): ")
-    bowling_style = input("Enter bowling style (Right-arm/Left-arm/None): ")
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD PLAYER ---")
+
+    player_name = input(Fore.WHITE + "Enter player name: " + Fore.WHITE)
+    age = int(input(Fore.WHITE + "Enter player age: " + Fore.WHITE))
+    role = input(Fore.WHITE + "Enter player role (Batsman/Bowler/All-rounder/Wicketkeeper): " + Fore.WHITE)
+    batting_style = input(Fore.WHITE + "Enter batting style (Right-hand/Left-hand): " + Fore.WHITE)
+    bowling_style = input(Fore.WHITE + "Enter bowling style (Right-arm/Left-arm/None): " + Fore.WHITE)
+
 
     try:
         query= "INSERT INTO players (name, age, role, batting_style, bowling_style) VALUES (%s, %s, %s, %s, %s)"
         cursor.execute(query, (player_name, age, role, batting_style, bowling_style))
         conn.commit()
     
-        print("Player added successfully.")
-        print("Your Player ID is:", cursor.lastrowid)
-    
+        print(Fore.GREEN + Style.BRIGHT + "✅ Player added successfully!")
+        print(Fore.GREEN + f"Player ID: {cursor.lastrowid}")
+
     except mysql.connector.Error as err:
         conn.rollback()
-        print(f"Error: {err}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Error: {err}")
+
     print()
 
 def add_venue():
-    venue_name = input("Enter venue name: ")
-    location = input("Enter location: ")
-    capacity = int(input("Enter capacity: "))
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD VENUE ---")
+
+    venue_name = input(Fore.WHITE + "Enter venue name: " + Fore.WHITE)
+    location = input(Fore.WHITE + "Enter location: " + Fore.WHITE)
+    capacity = int(input(Fore.WHITE + "Enter capacity: " + Fore.WHITE))
 
     try:
         query = "INSERT INTO venues (name, location, capacity) VALUES (%s, %s, %s)"
         cursor.execute(query, (venue_name, location, capacity))
         conn.commit()
+        print(Fore.GREEN + Style.BRIGHT + "✅ Venue added successfully!")
+        print(Fore.GREEN + f"Venue ID: {cursor.lastrowid}")
 
-        print("Venue added successfully.")
-        print("Your Venue ID is:", cursor.lastrowid)
-    
     except mysql.connector.Error as err:
         conn.rollback()
-        print(f"Error: {err}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Error: {err}")
+
     print()
 
 def add_umpire():
-    umpire_name = input("Enter umpire name: ")
-    experience_years = int(input("Enter years of experience: "))
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD UMPIRE ---")
+
+    umpire_name = input(Fore.WHITE + "Enter umpire name: " + Fore.WHITE)
+    experience_years = int(input(Fore.WHITE + "Enter years of experience: " + Fore.WHITE))
 
     try:
         query = "INSERT INTO umpires (name, experience) VALUES (%s, %s)"
         cursor.execute(query, (umpire_name, experience_years))
         conn.commit()
 
-        print("Umpire added successfully.")
-        print("Your Umpire ID is:", cursor.lastrowid)
-    
+        print(Fore.GREEN + Style.BRIGHT + "✅ Umpire added successfully!")
+        print(Fore.GREEN + f"Umpire ID: {cursor.lastrowid}")
+ 
     except mysql.connector.Error as err:
         conn.rollback()
-        print(f"Error: {err}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Error: {err}")
+
     print()
 
 def add_player_to_team():
-    player_id = int(input("Enter player id: "))
-    team_id = int(input("Enter team id: "))
-    contract_start = input("Enter contract start date (YYYY-MM-DD): ")
-    contract_end = input("Enter contract end date (YYYY-MM-DD): ")
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD PLAYER TO TEAM ---")
+
+    player_id = int(input(Fore.WHITE + "Enter player id: " + Fore.WHITE))
+    team_id = int(input(Fore.WHITE + "Enter team id: " + Fore.WHITE))
+    contract_start = input(Fore.WHITE + "Enter contract start date (YYYY-MM-DD): " + Fore.WHITE)
+    contract_end = input(Fore.WHITE + "Enter contract end date (YYYY-MM-DD): " + Fore.WHITE)
 
     try:
         query = "INSERT INTO team_players (team_id, player_id, contract_start, contract_end) VALUES(%s, %s, %s, %s)"
         cursor.execute(query, (team_id, player_id, contract_start, contract_end))
         conn.commit()
 
-        print("Player added to Team successfully")
-    
+        print(Fore.GREEN + Style.BRIGHT + "✅ Player added to Team successfully!")
+
     except mysql.connector.Error as err:
         conn.rollback()
-        print(f"Error: {err}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Error: {err}")
+
     print()
 
 def add_matches():
-    team1_id = int(input("Enter Team 1 ID: "))
-    team2_id = int(input("Enter Team 2 ID: "))
-    venue_id = int(input("Enter Venue ID: "))
-    umpire_id = int(input("Enter Umpire ID: "))
-    date = input("Enter match date (YYYY-MM-DD): ")
-    toss_winner = int(input("Enter Toss Winner Team ID: "))
-    toss_decision = input("Enter Toss Decision (Bat/Bowl): ")
-    team_1_score = int(input("Enter Team 1 Score: "))
-    team_2_score = int(input("Enter Team 2 Score: "))
-    team_1_wickets = int(input("Enter Team 1 Wickets Lost: "))
-    team_2_wickets = int(input("Enter Team 2 Wickets Lost: "))
-    match_result = input("Enter Match Result (Team 1/Team 2/Draw & By _ Runs/Wickets): ")
-    weather = input("Enter Weather Conditions: ")
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD MATCH ---")
+
+    team1_id = int(input(Fore.WHITE + "Enter Team 1 ID: " + Fore.WHITE))
+    team2_id = int(input(Fore.WHITE + "Enter Team 2 ID: " + Fore.WHITE))
+    venue_id = int(input(Fore.WHITE + "Enter Venue ID: " + Fore.WHITE))
+    umpire_id = int(input(Fore.WHITE + "Enter Umpire ID: " + Fore.WHITE))
+    date = input(Fore.WHITE + "Enter match date (YYYY-MM-DD): " + Fore.WHITE)
+    toss_winner = int(input(Fore.WHITE + "Enter Toss Winner Team ID: " + Fore.WHITE))
+    toss_decision = input(Fore.WHITE + "Enter Toss Decision (Bat/Bowl): " + Fore.WHITE)
+    team_1_score = int(input(Fore.WHITE + "Enter Team 1 Score: " + Fore.WHITE))
+    team_2_score = int(input(Fore.WHITE + "Enter Team 2 Score: " + Fore.WHITE))
+    team_1_wickets = int(input(Fore.WHITE + "Enter Team 1 Wickets Lost: " + Fore.WHITE))
+    team_2_wickets = int(input(Fore.WHITE + "Enter Team 2 Wickets Lost: " + Fore.WHITE))
+    match_result = input(Fore.WHITE + "Enter Match Result (Team 1/Team 2/Draw & By _ Runs/Wickets): " + Fore.WHITE)
+    weather = input(Fore.WHITE + "Enter Weather Conditions: " + Fore.WHITE)
 
     if team1_id == team2_id:
-        print("Error: A team cannot play against itself.")
+        print(Fore.RED + Style.BRIGHT + "❌ Error: A team cannot play against itself.")
         return
+
     try:
         query = """INSERT INTO matches (team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather) 
                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
         cursor.execute(query, (team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather))
         conn.commit()
 
-        print("Match added successfully.")
-        print("Your Match ID is:", cursor.lastrowid)
+        print(Fore.GREEN + Style.BRIGHT + "✅ Match added successfully!")
+        print(Fore.GREEN + f"Match ID: {cursor.lastrowid}")
 
     except mysql.connector.Error as err:
-        conn.rollback()()
-        print(f"Error: {err}")
+        conn.rollback()
+        print(Fore.RED + Style.BRIGHT + f"❌ Error: {err}")
+
     print()
 
 def add_player_stats():
-    player_id = int(input("Enter Player ID: "))
-    match_id = int(input("Enter Match ID: "))
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD PLAYER STATS ---")
+
+    player_id = int(input(Fore.WHITE + "Enter Player ID: " + Fore.WHITE))
+    match_id = int(input(Fore.WHITE + "Enter Match ID: " + Fore.WHITE))
+
     # batting stats
-    runs_scored = int(input("Enter Runs Scored: "))
-    balls_faced = int(input("Enter Balls Faced: "))
-    fours = int(input("Enter Number of Fours: "))
-    sixes = int(input("Enter Number of Sixes: "))
+    print(Fore.CYAN + "\n--- BATTING STATS ---")
+    runs_scored = int(input(Fore.WHITE + "Enter Runs Scored: " + Fore.WHITE))
+    balls_faced = int(input(Fore.WHITE + "Enter Balls Faced: " + Fore.WHITE))
+    fours = int(input(Fore.WHITE + "Enter Number of Fours: " + Fore.WHITE))
+    sixes = int(input(Fore.WHITE + "Enter Number of Sixes: " + Fore.WHITE))
+
     # bowling stats
-    overs_bowled = float(input("Enter Overs Bowled: "))
-    runs_conceded = int(input("Enter Runs Conceded: "))
-    wickets = int(input("Enter Wickets Taken: "))
+    print(Fore.CYAN + "\n--- BOWLING STATS ---")
+    overs_bowled = float(input(Fore.WHITE + "Enter Overs Bowled: " + Fore.WHITE))
+    runs_conceded = int(input(Fore.WHITE + "Enter Runs Conceded: " + Fore.WHITE))
+    wickets = int(input(Fore.WHITE + "Enter Wickets Taken: " + Fore.WHITE))
+
     # fielding stats
-    catches = int(input("Enter No.of Catches Taken: "))
-    run_outs = int(input("Enter No.of Run Outs Made: "))
-    stumpings = int(input("Enter No.of Stumpings Made: "))
+    print(Fore.CYAN + "\n--- FIELDING STATS ---")
+    catches = int(input(Fore.WHITE + "Enter No.of Catches Taken: " + Fore.WHITE))
+    run_outs = int(input(Fore.WHITE + "Enter No.of Run Outs Made: " + Fore.WHITE))
+    stumpings = int(input(Fore.WHITE + "Enter No.of Stumpings Made: " + Fore.WHITE))
 
     matches_played = 1
     fifties = 1 if 50 <= runs_scored < 100 else 0
@@ -376,15 +421,16 @@ def add_player_stats():
         """, (player_id, matches_played, catches, run_outs, stumpings))
 
         conn.commit()
-        print("Player stats added and cumulative stats updated successfully.")
+        print(Fore.GREEN + Style.BRIGHT + "✅ Player stats added and cumulative stats updated successfully!")
 
     except mysql.connector.Error as err:
         conn.rollback()
-        print(f"Error: {err}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Error: {err}")
+
     print()
 
-
 def view_teams():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- TEAMS ---")
     cursor.execute('SELECT * FROM teams')
     rows = cursor.fetchall()
     table = PrettyTable(['ID', 'Name', 'Captain', 'Coach', 'Home Ground'])
@@ -394,6 +440,7 @@ def view_teams():
     print()
 
 def view_players():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- PLAYERS ---")
     cursor.execute('SELECT * FROM players')
     rows = cursor.fetchall()
     table = PrettyTable(['ID', 'Name', 'Age', 'Role', 'Batting Style', 'Bowling Style'])
@@ -403,6 +450,7 @@ def view_players():
     print()
 
 def view_venues():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- VENUES ---")
     cursor.execute('SELECT * FROM venues')
     rows = cursor.fetchall()
     table = PrettyTable(['ID', 'Name', 'Location', 'Capacity'])
@@ -412,6 +460,7 @@ def view_venues():
     print()
 
 def view_umpires():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- UMPIRES ---")
     cursor.execute('SELECT * FROM umpires')
     rows = cursor.fetchall()
     table = PrettyTable(['ID', 'Name', 'Experience (Years)'])
@@ -421,6 +470,7 @@ def view_umpires():
     print()
 
 def view_matches():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- MATCHES ---")
     cursor.execute('SELECT * FROM matches')
     rows = cursor.fetchall()
     table = PrettyTable(['Match ID', 'Team 1 ID', 'Team 2 ID', 'Venue ID', 'Umpire ID', 'Date', 'Toss Winner', 'Toss Decision', 'Team 1 Score', 'Team 2 Score', 'Team 1 Wickets', 'Team 2 Wickets', 'Match Result', 'Weather'])
@@ -430,6 +480,7 @@ def view_matches():
     print()
 
 def view_batting_stats():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- BATTING STATS ---")
     cursor.execute('SELECT * FROM batting_stats')
     rows = cursor.fetchall()
     table = PrettyTable(['Player ID', 'Matches Played', 'Runs Scored', 'Balls Faced', 'Strike Rate', 'Fours', 'Sixes', 'Fifties', 'Hundreds'])
@@ -439,6 +490,7 @@ def view_batting_stats():
     print()
 
 def view_bowling_stats():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- BOWLING STATS ---")
     cursor.execute('SELECT * FROM bowling_stats')
     rows = cursor.fetchall()
     table = PrettyTable(['Player ID', 'Matches Played', 'Overs Bowled', 'Runs Conceded', 'Economy', 'Wickets Taken'])
@@ -448,6 +500,7 @@ def view_bowling_stats():
     print()
 
 def view_fielding_stats():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- FIELDING STATS ---")
     cursor.execute('SELECT * FROM fielding_stats')
     rows = cursor.fetchall()
     table = PrettyTable(['Player ID', 'Matches Played', 'Catches', 'Run Outs', 'Stumpings'])
@@ -457,6 +510,7 @@ def view_fielding_stats():
     print()
 
 def view_player_match_stats():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- PLAYER MATCH STATS ---")
     cursor.execute('SELECT * FROM player_match_stats')
     rows = cursor.fetchall()
     table = PrettyTable(['Player ID', 'Match ID', 'Runs Scored', 'Balls Faced', 'Fours', 'Sixes', 'Wickets Taken', 'Overs Bowled', 'Runs Conceded', 'Catches', 'Run Outs', 'Stumpings'])
@@ -466,6 +520,8 @@ def view_player_match_stats():
     print()
 
 def export_data(table_name):
+    print(Fore.YELLOW + f"\n--- EXPORTING {table_name.upper()} ---")
+    
     try:
         cursor.execute(f"SELECT * FROM {table_name}")
         rows = cursor.fetchall()
@@ -477,11 +533,14 @@ def export_data(table_name):
             writer = csv.writer(file)
             writer.writerow(columns)
             writer.writerows(rows)
-        print(f"Data exported successfully to {filename}")
+
+        print(Fore.GREEN + Style.BRIGHT + f"✅ Data exported successfully to {filename}")
+
     except mysql.connector.Error as err:
-        print(f"Error: {err}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Database Error: {err}")
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        print(Fore.RED + Style.BRIGHT + f"❌ Unexpected error: {e}")
+
     print()
 
 def predict_player_score():
@@ -547,6 +606,10 @@ def predict_team_score():
 
     print(f"Predicted team score for Team ID {team_id} in next match: {avg_runs:.2f}/{avg_wkts:.0f}")
     print()
+
+#main menu
+print(Fore.GREEN + Style.BRIGHT + "🏏 Welcome to CrickStatz - Cricket Tournament Management System!")
+print(Fore.BLUE + "=" * 80)
 
 while True:
     main_menu()
