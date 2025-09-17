@@ -65,7 +65,8 @@ def main_menu():
     print("1. Add Records")
     print("2. View Records")
     print("3. Export Data to CSV")
-    print("4. Exit")
+    print("4. Predict Scores")
+    print("5. Exit")
     choice = input("Enter your choice (1-4): ")
 
     if choice == '1':
@@ -95,6 +96,7 @@ def main_menu():
             add_player_stats()
         else:
             print("Invalid choice. Please try again.")
+
     elif choice == '2':
         print("---VIEW RECORDS---")
         print("a. View Teams")
@@ -162,7 +164,21 @@ def main_menu():
             export_data('player_match_stats')
         else:
             print("Invalid choice. Please try again.")
+
     elif choice == '4':
+        print("---PREDICT SCORES---")
+        print("a. Predict Player Score")
+        print("b. Predict Team Score")
+        sub_choice = input("Enter your choice (a-b): ").lower()
+
+        if sub_choice == 'a':
+            predict_player_score()
+        elif sub_choice == 'b':
+            predict_team_score()
+        else:
+            print("Invalid choice. Please try again.")
+
+    elif choice == '5':
         print("Exiting the program. Goodbye!")
         cursor.close()
         conn.close()
@@ -468,6 +484,69 @@ def export_data(table_name):
         print(f"Unexpected error: {e}")
     print()
 
+def predict_player_score():
+    player_id = int(input("Enter Player ID to predict next match score: "))
+    num_matches = input("Enter number of recent matches to consider (default 5): ")
+    num_matches = int(num_matches) if num_matches else 5
+
+    cursor.execute("""
+        SELECT runs_scored 
+        FROM player_match_stats
+        WHERE player_id = %s
+        ORDER BY match_id DESC
+        LIMIT %s
+    """, (player_id, num_matches))
+    rows = cursor.fetchall()
+
+    if not rows:
+        print("No match data found for this player.\n")
+        return
+
+    scores = [row[0] for row in rows]
+
+    # Weighted average (recent matches count more)
+    weights = list(range(1, len(scores) + 1))
+    weighted_avg = sum(s * w for s, w in zip(scores, weights)) / sum(weights)
+
+    print(f"Predicted runs for Player ID {player_id} in next match (based on last {len(scores)} matches): {weighted_avg:.2f}")
+    print()
+
+def predict_team_score():
+    team_id = int(input("Enter Team ID to predict next match score: "))
+    num_matches = input("Enter number of recent matches to consider (default 5): ")
+    num_matches = int(num_matches) if num_matches else 5
+
+    cursor.execute("""
+        SELECT team_1_score, team_1_wickets 
+        FROM matches 
+        WHERE team1_id = %s
+        ORDER BY match_id DESC
+        LIMIT %s
+    """, (team_id, num_matches))
+    rows1 = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT team_2_score, team_2_wickets 
+        FROM matches 
+        WHERE team2_id = %s
+        ORDER BY match_id DESC
+        LIMIT %s
+    """, (team_id, num_matches))
+    rows2 = cursor.fetchall()
+
+    rows = rows1 + rows2
+    if not rows:
+        print("No match data found for this team.\n")
+        return
+
+    scores = [r[0] for r in rows]
+    wickets = [r[1] for r in rows]
+
+    avg_runs = sum(scores) / len(scores)
+    avg_wkts = sum(wickets) / len(wickets)
+
+    print(f"Predicted team score for Team ID {team_id} in next match: {avg_runs:.2f}/{avg_wkts:.0f}")
+    print()
+
 while True:
     main_menu()
-    print()
