@@ -1,4 +1,3 @@
--- Dummy data insert script for crickstatz
 USE crickstatz;
 
 -- ----------------------------------------------------------------
