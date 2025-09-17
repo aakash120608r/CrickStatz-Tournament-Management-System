@@ -1,7 +1,7 @@
 import mysql.connector
-import pandas as pd
 from prettytable import PrettyTable
 import os
+import csv
 from colorama import Fore, Back, Style, init
 import pyfiglet
 
@@ -449,15 +449,24 @@ def view_player_match_stats():
     print(table)
     print()
 
-def export_data(tablename):
-    cursor.execute(f'SELECT * FROM {tablename}')
-    rows = cursor.fetchall()
-    columns = [desc[0] for desc in cursor.description]
+def export_data(table_name):
+    try:
+        cursor.execute(f"SELECT * FROM {table_name}")
+        rows = cursor.fetchall()
+        columns = [desc[0] for desc in cursor.description]
 
-    os.makedirs('export', exist_ok=True)
-    df = pd.DataFrame(rows, columns=columns)
-    df.to_csv(f'export/{tablename}.csv', index=False)
-    print(f"Data exported to {tablename}.csv successfully.\n Please check the 'export' folder.")
+        os.makedirs('exports', exist_ok=True)
+        filename = os.path.join('exports', f"{table_name}.csv")
+        with open(filename, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(columns)
+            writer.writerows(rows)
+        print(f"Data exported successfully to {filename}")
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    print()
 
 while True:
     main_menu()

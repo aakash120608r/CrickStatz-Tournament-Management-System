@@ -1,2 +1,2 @@
-# Ignore dump.txt file
-dump.txt
+# Ignore .vscode folder
+.vscode/
