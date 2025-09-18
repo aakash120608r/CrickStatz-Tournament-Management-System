@@ -88,7 +88,7 @@ def get_float(prompt, default=None, allow_empty=False):
 #enum input validation
 def choose_enum(prompt, allowed):
     while True:
-        v = input(prompt).strip()
+        v = input(prompt).strip().capitalize()
         if v in allowed:
             return v
         print(Fore.RED + f"Invalid. Choose one of: {', '.join(allowed)}")
@@ -661,5 +661,9 @@ def main_menu():
 print(Fore.GREEN + Style.BRIGHT + "🏏 Welcome to CrickStatz - Cricket Tournament Management System!")
 print(Fore.BLUE + "=" * 80)
 while True:
-    main_menu()\
+    main_menu()
     print(Fore.BLUE + "=" * 80)
+
+cursor.close()
+conn.close()
+exit()
