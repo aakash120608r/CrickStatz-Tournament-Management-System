@@ -521,17 +521,17 @@ def view_fielding_stats():
     print(table)
 
     print()
-
+    
 def view_player_match_stats():
-    print(Fore.YELLOW + Style.BRIGHT + "\n--- PLAYER MATCH STATS ---")
-    cursor.execute('SELECT * FROM player_match_stats')
+    cursor.execute("""
+        SELECT player_id, match_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings
+        FROM player_match_stats
+    """)
     rows = cursor.fetchall()
     table = PrettyTable(['Player ID', 'Match ID', 'Runs Scored', 'Balls Faced', 'Fours', 'Sixes', 'Wickets Taken', 'Overs Bowled', 'Runs Conceded', 'Catches', 'Run Outs', 'Stumpings'])
-    for row in rows:    
+    for row in rows:
         table.add_row(row)
     print(table)
-
-    print()
 
 def export_data(table_name):
     print(Fore.YELLOW + f"\n--- EXPORTING {table_name.upper()} ---")
