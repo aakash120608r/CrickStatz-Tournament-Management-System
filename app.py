@@ -144,6 +144,7 @@ def main_menu():
             view_player_match_stats()
         else:
             print(Fore.RED + "Invalid choice. Please try again.")
+
     elif choice == '3':
         print(Fore.YELLOW + Style.BRIGHT + "--- EXPORT DATA TO CSV ---")
         print()
@@ -179,6 +180,7 @@ def main_menu():
             export_data('player_match_stats')
         else:
             print(Fore.RED + "Invalid choice. Please try again.")
+
     elif choice == '4':
         print(Fore.YELLOW + Style.BRIGHT + "--- PREDICT SCORES ---")
         print()
@@ -193,6 +195,7 @@ def main_menu():
             predict_team_score()
         else:
             print(Fore.RED + "Invalid choice. Please try again.")
+
     elif choice == '5':
         print(Fore.GREEN + Style.BRIGHT + "Thank you for using CrickStatz!")
         print(Fore.GREEN + "Exiting the program. Goodbye!")
@@ -201,6 +204,7 @@ def main_menu():
         exit()
     else:
         print(Fore.RED + "Invalid choice. Please try again.")
+
 
 def add_team():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD TEAM ---")
@@ -429,6 +433,7 @@ def add_player_stats():
 
     print()
 
+
 def view_teams():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- TEAMS ---")
     cursor.execute('SELECT * FROM teams')
@@ -437,6 +442,7 @@ def view_teams():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_players():
@@ -447,6 +453,7 @@ def view_players():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_venues():
@@ -457,6 +464,7 @@ def view_venues():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_umpires():
@@ -467,6 +475,7 @@ def view_umpires():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_matches():
@@ -477,6 +486,7 @@ def view_matches():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_batting_stats():
@@ -487,6 +497,7 @@ def view_batting_stats():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_bowling_stats():
@@ -497,6 +508,7 @@ def view_bowling_stats():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_fielding_stats():
@@ -507,6 +519,7 @@ def view_fielding_stats():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def view_player_match_stats():
@@ -517,6 +530,7 @@ def view_player_match_stats():
     for row in rows:    
         table.add_row(row)
     print(table)
+
     print()
 
 def export_data(table_name):
@@ -543,6 +557,7 @@ def export_data(table_name):
 
     print()
 
+
 def predict_player_score():
     player_id = int(input("Enter Player ID to predict next match score: "))
     num_matches = input("Enter number of recent matches to consider (default 5): ")
@@ -568,6 +583,7 @@ def predict_player_score():
     weighted_avg = sum(s * w for s, w in zip(scores, weights)) / sum(weights)
 
     print(f"Predicted runs for Player ID {player_id} in next match (based on last {len(scores)} matches): {weighted_avg:.2f}")
+
     print()
 
 def predict_team_score():
@@ -605,7 +621,9 @@ def predict_team_score():
     avg_wkts = sum(wickets) / len(wickets)
 
     print(f"Predicted team score for Team ID {team_id} in next match: {avg_runs:.2f}/{avg_wkts:.0f}")
+
     print()
+
 
 #main menu
 print(Fore.GREEN + Style.BRIGHT + "🏏 Welcome to CrickStatz - Cricket Tournament Management System!")
