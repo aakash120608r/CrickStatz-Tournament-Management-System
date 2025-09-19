@@ -1,8 +1,5 @@
 USE crickstatz;
 
--- ----------------------------------------------------------------
--- 1) Teams (10 IPL teams) - explicit team_id so we can reference
--- ----------------------------------------------------------------
 INSERT INTO teams (team_id, name, captain, coach, home_ground) VALUES
 (1, 'Chennai Super Kings', 'MS Dhoni', 'Stephen Fleming', 'MA Chidambaram Stadium, Chennai'),
 (2, 'Delhi Capitals', 'Rishabh Pant', 'David Warner', 'Arun Jaitley Stadium, Delhi'),
@@ -15,9 +12,6 @@ INSERT INTO teams (team_id, name, captain, coach, home_ground) VALUES
 (9, 'Royal Challengers Bangalore', 'Faf du Plessis', 'Sanath Jayasuriya', 'M Chinnaswamy Stadium, Bangalore'),
 (10,'Sunrisers Hyderabad', 'Aiden Markram', 'Trevor Bayliss', 'Rajiv Gandhi Intl. Cricket Stadium, Hyderabad');
 
--- ----------------------------------------------------------------
--- 2) Venues
--- ----------------------------------------------------------------
 INSERT INTO venues (venue_id, name, location, capacity) VALUES
 (1, 'MA Chidambaram Stadium', 'Chennai', 38000),
 (2, 'Arun Jaitley Stadium', 'Delhi', 41000),
@@ -28,9 +22,6 @@ INSERT INTO venues (venue_id, name, location, capacity) VALUES
 (7, 'M Chinnaswamy Stadium', 'Bangalore', 35000),
 (8, 'Rajiv Gandhi Intl. Cricket Stadium', 'Hyderabad', 55000);
 
--- ----------------------------------------------------------------
--- 3) Umpires
--- ----------------------------------------------------------------
 INSERT INTO umpires (umpire_id, name, experience) VALUES
 (1, 'Kumar Dharmasena', 18),
 (2, 'Aleem Dar', 22),
@@ -41,10 +32,6 @@ INSERT INTO umpires (umpire_id, name, experience) VALUES
 (7, 'Nitin Menon', 8),
 (8, 'K. N. Anantha', 10);
 
--- ----------------------------------------------------------------
--- 4) Players (150 players) - assigned player_id 1..150
---    15 players per team (team assignment via team_players below)
--- ----------------------------------------------------------------
 INSERT INTO players (player_id, name, age, role, batting_style, bowling_style) VALUES
 -- Team 1: Chennai Super Kings (players 1-15)
 (1, 'MS Dhoni', 43, 'Wicketkeeper', 'Right-hand bat', 'Right-arm medium'),
@@ -216,11 +203,6 @@ INSERT INTO players (player_id, name, age, role, batting_style, bowling_style) V
 (149, 'Kedar Jadhav', 36, 'All-rounder', 'Right-hand bat', 'Right-arm off-break'),
 (150, 'Rashid Khan Jr', 21, 'Bowler', 'Right-hand bat', 'Leg break');
 
--- ----------------------------------------------------------------
--- 5) team_players mapping (team_id, player_id, contract dates)
---    15 players each (team 1 -> players 1..15, team 2 -> 16..30, etc.)
--- ----------------------------------------------------------------
--- For simplicity use contract_start = '2024-03-01', contract_end = '2025-03-01'
 INSERT INTO team_players (team_id, player_id, contract_start, contract_end) VALUES
 -- Team 1 (CSK)
 (1,1,'2024-03-01','2025-03-01'),(1,2,'2024-03-01','2025-03-01'),(1,3,'2024-03-01','2025-03-01'),
@@ -292,119 +274,270 @@ INSERT INTO team_players (team_id, player_id, contract_start, contract_end) VALU
 (10,145,'2024-03-01','2025-03-01'),(10,146,'2024-03-01','2025-03-01'),(10,147,'2024-03-01','2025-03-01'),
 (10,148,'2024-03-01','2025-03-01'),(10,149,'2024-03-01','2025-03-01'),(10,150,'2024-03-01','2025-03-01');
 
--- ----------------------------------------------------------------
--- 6) Matches (20 matches) - match_id 1..20
---    Each match links team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, scores
--- ----------------------------------------------------------------
-INSERT INTO matches (match_id, team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather)
-VALUES
-(1, 1, 2, 1, 1, '2024-04-01', 1, 'Bat', 180, 165, 6, 9, 'Chennai Super Kings won by 15 runs', 'Clear'),
-(2, 3, 4, 3, 2, '2024-04-02', 3, 'Bowl', 150, 151, 8, 4, 'Kolkata Knight Riders won by 6 wickets', 'Cloudy'),
-(3, 5, 6, 5, 3, '2024-04-03', 6, 'Bowl', 142, 143, 9, 7, 'Mumbai Indians won by 3 wickets', 'Clear'),
-(4, 7, 8, 8, 4, '2024-04-04', 8, 'Bat', 210, 205, 5, 8, 'Punjab Kings won by 5 runs', 'Hot'),
-(5, 9, 10, 7, 5, '2024-04-05', 9, 'Bat', 175, 176, 7, 6, 'Sunrisers Hyderabad won by 4 wickets', 'Clear'),
-(6, 2, 3, 2, 6, '2024-04-06', 3, 'Bat', 160, 161, 10, 5, 'Gujarat Titans won by 5 wickets', 'Humid'),
-(7, 4, 5, 4, 1, '2024-04-07', 4, 'Bowl', 145, 146, 9, 6, 'Lucknow Super Giants won by 4 wickets', 'Cloudy'),
-(8, 6, 7, 6, 2, '2024-04-08', 6, 'Bat', 190, 170, 4, 10, 'Mumbai Indians won by 20 runs', 'Clear'),
-(9, 8, 9, 8, 3, '2024-04-09', 9, 'Bat', 200, 198, 3, 8, 'Rajasthan Royals won by 2 runs', 'Warm'),
-(10,10,1,1,4, '2024-04-10', 10, 'Bowl', 155, 156, 10, 6, 'Chennai Super Kings won by 4 wickets', 'Clear'),
-(11,2,4,2,5, '2024-04-11', 2, 'Bat', 170, 172, 7, 6, 'Kolkata Knight Riders won by 3 wickets', 'Cloudy'),
-(12,3,6,3,6, '2024-04-12', 3, 'Bowl', 142, 143, 10, 4, 'Mumbai Indians won by 6 wickets', 'Clear'),
-(13,5,9,5,1, '2024-04-13', 5, 'Bat', 185, 186, 9, 5, 'Royal Challengers Bangalore won by 4 wickets', 'Sunny'),
-(14,7,10,6,2,'2024-04-14',7,'Bat', 172, 160, 8, 10, 'Punjab Kings won by 12 runs', 'Clear'),
-(15,8,1,8,3,'2024-04-15',8,'Bowl', 150, 151, 10, 6, 'Chennai Super Kings won by 4 wickets', 'Warm'),
-(16,4,6,4,4, '2024-04-16',4,'Bat', 168, 169, 7, 9, 'Mumbai Indians won by 1 wicket', 'Cloudy'),
-(17,9,3,7,5, '2024-04-17',9,'Bat', 180, 159, 6, 10, 'Royal Challengers Bangalore won by 21 runs', 'Clear'),
-(18,2,10,2,6,'2024-04-18',2,'Bowl', 140, 141, 9, 7, 'Sunrisers Hyderabad won by 3 wickets', 'Rain'),
-(19,1,5,1,1,'2024-04-19',1,'Bat', 195, 185, 6, 9, 'Chennai Super Kings won by 10 runs', 'Hot'),
-(20,7,4,6,2,'2024-04-20',7,'Bowl', 162, 163, 8, 6, 'Kolkata Knight Riders won by 1 wicket', 'Clear');
+-- Sample IPL Matches Data
+INSERT INTO matches (match_id, team1_id, team2_id, venue_id, umpire_id, date, toss_winner, toss_decision, team_1_score, team_2_score, team_1_wickets, team_2_wickets, match_result, weather) VALUES
+-- Match 1: CSK vs MI
+(1, 1, 6, 1, 1, '2024-04-15', 1, 'Bat', 185, 187, 6, 4, 'Mumbai Indians won by 6 wickets', 'Clear'),
+-- Match 2: RCB vs KKR  
+(2, 9, 4, 7, 2, '2024-04-16', 9, 'Bowl', 172, 175, 8, 5, 'Kolkata Knight Riders won by 5 wickets', 'Partly cloudy'),
+-- Match 3: GT vs SRH
+(3, 3, 10, 3, 3, '2024-04-17', 10, 'Bat', 195, 162, 4, 10, 'Gujarat Titans won by 33 runs', 'Hot and sunny'),
+-- Match 4: DC vs PBKS
+(4, 2, 7, 2, 4, '2024-04-18', 2, 'Bowl', 156, 158, 9, 7, 'Punjab Kings won by 3 wickets', 'Overcast'),
+-- Match 5: LSG vs RR
+(5, 5, 8, 5, 5, '2024-04-19', 8, 'Bat', 178, 179, 7, 8, 'Lucknow Super Giants won by 2 wickets', 'Clear'),
+-- Match 6: MI vs RCB
+(6, 6, 9, 6, 6, '2024-04-20', 6, 'Bat', 192, 195, 5, 6, 'Royal Challengers Bangalore won by 4 wickets', 'Humid'),
+-- Match 7: CSK vs GT
+(7, 1, 3, 1, 7, '2024-04-21', 3, 'Bowl', 168, 171, 8, 6, 'Gujarat Titans won by 4 wickets', 'Cool evening'),
+-- Match 8: KKR vs SRH
+(8, 4, 10, 4, 8, '2024-04-22', 4, 'Bat', 201, 198, 3, 9, 'Kolkata Knight Riders won by 3 runs', 'Perfect weather'),
+-- Match 9: DC vs RR
+(9, 2, 8, 2, 1, '2024-04-23', 8, 'Bowl', 143, 147, 9, 8, 'Rajasthan Royals won by 2 wickets', 'Light drizzle'),
+-- Match 10: PBKS vs LSG
+(10, 7, 5, 7, 2, '2024-04-24', 7, 'Bat', 189, 165, 6, 10, 'Punjab Kings won by 24 runs', 'Windy'),
+-- Match 11: RCB vs CSK
+(11, 9, 1, 7, 3, '2024-04-25', 1, 'Bowl', 173, 176, 7, 5, 'Chennai Super Kings won by 5 wickets', 'Clear'),
+-- Match 12: MI vs GT
+(12, 6, 3, 6, 4, '2024-04-26', 3, 'Bat', 207, 183, 4, 8, 'Mumbai Indians won by 24 runs', 'Hot'),
+-- Match 13: KKR vs DC
+(13, 4, 2, 4, 5, '2024-04-27', 4, 'Bowl', 158, 161, 8, 6, 'Delhi Capitals won by 4 wickets', 'Pleasant'),
+-- Match 14: SRH vs RR
+(14, 10, 8, 8, 6, '2024-04-28', 10, 'Bat', 211, 167, 3, 10, 'Sunrisers Hyderabad won by 44 runs', 'Very hot'),
+-- Match 15: LSG vs PBKS
+(15, 5, 7, 5, 7, '2024-04-29', 5, 'Bowl', 149, 152, 9, 7, 'Punjab Kings won by 3 wickets', 'Overcast'),
+-- Match 16: CSK vs RCB
+(16, 1, 9, 1, 8, '2024-04-30', 9, 'Bat', 166, 169, 8, 6, 'Royal Challengers Bangalore won by 4 wickets', 'Humid'),
+-- Match 17: GT vs MI
+(17, 3, 6, 3, 1, '2024-05-01', 6, 'Bowl', 181, 184, 7, 5, 'Mumbai Indians won by 5 wickets', 'Clear'),
+-- Match 18: DC vs KKR
+(18, 2, 4, 2, 2, '2024-05-02', 2, 'Bat', 174, 177, 6, 4, 'Kolkata Knight Riders won by 6 wickets', 'Cool'),
+-- Match 19: RR vs SRH
+(19, 8, 10, 8, 3, '2024-05-03', 8, 'Bowl', 155, 158, 8, 7, 'Sunrisers Hyderabad won by 3 wickets', 'Warm'),
+-- Match 20: PBKS vs CSK
+(20, 7, 1, 7, 4, '2024-05-04', 1, 'Bat', 179, 156, 5, 10, 'Chennai Super Kings won by 23 runs', 'Windy');
 
--- ----------------------------------------------------------------
--- 7) Basic batting_stats, bowling_stats, fielding_stats
---    We'll insert zero/placeholder stats for all players, then
---    add a few sample populated stats to show usage
--- ----------------------------------------------------------------
--- Default zero stats for every player
-INSERT INTO batting_stats (player_id, matches_played, runs_scored, balls_faced, fours, sixes, fifties, hundreds)
-SELECT player_id, 0, 0, 0, 0, 0, 0, 0 FROM players;
+-- Sample Batting Stats (aggregated career stats for key players)
+INSERT INTO batting_stats (player_id, matches_played, runs_scored, balls_faced, fours, sixes, fifties, hundreds) VALUES
+-- CSK players
+(1, 25, 412, 378, 28, 18, 2, 0),    -- MS Dhoni
+(2, 22, 856, 642, 89, 12, 6, 2),    -- Ruturaj Gaikwad
+(3, 18, 678, 489, 76, 14, 4, 1),    -- Devon Conway
+(11, 24, 445, 298, 32, 22, 1, 0),   -- Ravindra Jadeja
+(13, 20, 523, 312, 41, 28, 3, 0),   -- Shivam Dube
 
-INSERT INTO bowling_stats (player_id, matches_played, overs_bowled, runs_conceded, wickets)
-SELECT player_id, 0, 0.0, 0, 0 FROM players;
+-- MI players
+(76, 28, 892, 678, 98, 24, 5, 2),   -- Rohit Sharma
+(77, 24, 634, 478, 56, 32, 3, 1),   -- Ishan Kishan
+(78, 26, 978, 634, 89, 45, 7, 2),   -- Suryakumar Yadav
+(80, 19, 445, 312, 48, 18, 2, 0),   -- Tilak Varma
+(82, 21, 567, 398, 52, 28, 3, 0),   -- Cameron Green
 
-INSERT INTO fielding_stats (player_id, matches_played, catches, run_outs, stumpings)
-SELECT player_id, 0, 0, 0, 0 FROM players;
+-- RCB players
+(121, 25, 823, 612, 94, 18, 6, 1),  -- Faf du Plessis
+(122, 27, 1245, 834, 134, 28, 9, 3), -- Virat Kohli
+(123, 23, 672, 423, 58, 38, 4, 1),  -- Glenn Maxwell
+(125, 22, 389, 298, 34, 16, 1, 0),  -- Dinesh Karthik
 
--- ----------------------------------------------------------------
--- 8) A few sample player_match_stats for some matches to show links
---    We'll add stats for notable players in match 1..5
--- ----------------------------------------------------------------
--- Match 1: Chennai (team1) vs Delhi (team2) - match_id 1
-INSERT INTO player_match_stats (match_id, player_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings)
-VALUES
-(1, 2, 62, 48, 6, 1, 0, 0.0, 0, 1, 0, 0),   -- Ruturaj Gaikwad scored 62
-(1, 3, 48, 36, 4, 2, 0, 0.0, 0, 0, 0, 0),   -- Devon Conway 48
-(1, 16, 45, 32, 5, 1, 0, 0.0, 0, 0, 0, 0),  -- Rishabh Pant 45
-(1, 21, 0, 2, 0, 0, 2, 4.0, 32, 0, 0, 0);   -- Anrich Nortje 2 wickets
+-- KKR players
+(46, 24, 734, 556, 78, 22, 5, 1),   -- Shreyas Iyer
+(48, 20, 456, 278, 32, 34, 2, 0),   -- Andre Russell
+(49, 25, 398, 234, 28, 26, 1, 0),   -- Sunil Narine
+(54, 21, 523, 398, 56, 18, 3, 0),   -- Rinku Singh
 
--- Update aggregated stats for these players (update batting_stats, bowling_stats, fielding_stats)
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 62, balls_faced = balls_faced + 48, fours = fours + 6, sixes = sixes + 1 WHERE player_id = 2;
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 48, balls_faced = balls_faced + 36, fours = fours + 4, sixes = sixes + 2 WHERE player_id = 3;
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 45, balls_faced = balls_faced + 32, fours = fours + 5, sixes = sixes + 1 WHERE player_id = 16;
-UPDATE bowling_stats SET matches_played = matches_played + 1, overs_bowled = overs_bowled + 4.0, runs_conceded = runs_conceded + 32, wickets = wickets + 2 WHERE player_id = 21;
-UPDATE fielding_stats SET matches_played = matches_played + 1, catches = catches + 1 WHERE player_id = 2;
+-- GT players
+(31, 22, 567, 378, 48, 32, 3, 0),   -- Hardik Pandya
+(32, 24, 812, 634, 89, 16, 6, 2),   -- Shubman Gill
+(43, 19, 445, 312, 42, 24, 2, 0),   -- David Miller
+(34, 23, 278, 189, 18, 12, 0, 0),   -- Rashid Khan
 
--- Match 2: Gujarat (team3) vs KKR (team4) - match_id 2
-INSERT INTO player_match_stats (match_id, player_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings)
-VALUES
-(2, 32, 72, 58, 8, 2, 0, 0.0, 0, 1, 0, 0),  -- Shubman Gill 72
-(2, 34, 10, 6, 1, 1, 2, 4.0, 28, 0, 0, 0),  -- Rashid Khan 2 wickets
-(2, 48, 45, 35, 6, 1, 0, 0.0, 0, 0, 0, 0);  -- Andre Russell 45
+-- DC players
+(16, 23, 698, 523, 67, 34, 4, 1),   -- Rishabh Pant
+(17, 20, 456, 378, 52, 12, 2, 0),   -- Prithvi Shaw
+(18, 18, 534, 423, 64, 18, 3, 0),   -- David Warner
+(22, 24, 378, 298, 32, 14, 1, 0),   -- Axar Patel
 
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 72, balls_faced = balls_faced + 58, fours = fours + 8, sixes = sixes + 2 WHERE player_id = 32;
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 45, balls_faced = balls_faced + 35, fours = fours + 6, sixes = sixes + 1 WHERE player_id = 48;
-UPDATE bowling_stats SET matches_played = matches_played + 1, overs_bowled = overs_bowled + 4.0, runs_conceded = runs_conceded + 28, wickets = wickets + 2 WHERE player_id = 34;
+-- LSG players
+(61, 25, 845, 678, 92, 18, 6, 2),   -- KL Rahul
+(62, 21, 623, 456, 68, 22, 4, 0),   -- Quinton de Kock
+(64, 22, 489, 334, 42, 26, 2, 0),   -- Marcus Stoinis
+(70, 20, 456, 312, 38, 28, 2, 0),   -- Nicholas Pooran
 
--- Match 3: LSG (team5) vs MI (team6) - match_id 3
-INSERT INTO player_match_stats (match_id, player_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings)
-VALUES
-(3, 61, 58, 44, 6, 1, 0, 0.0, 0, 0, 0, 0),  -- KL Rahul 58
-(3, 76, 70, 50, 7, 2, 0, 0.0, 0, 1, 0, 0),  -- Rohit Sharma 70
-(3, 79, 0, 5, 0, 0, 3, 4.0, 26, 0, 0, 0);   -- Jasprit Bumrah 3 wickets
+-- PBKS players
+(91, 23, 523, 398, 48, 24, 3, 0),   -- Sam Curran
+(92, 22, 634, 534, 78, 8, 4, 1),    -- Shikhar Dhawan
+(93, 19, 456, 334, 52, 18, 2, 0),   -- Jonny Bairstow
+(94, 21, 567, 378, 46, 32, 3, 0),   -- Liam Livingstone
 
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 58, balls_faced = balls_faced + 44, fours = fours + 6, sixes = sixes + 1 WHERE player_id = 61;
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 70, balls_faced = balls_faced + 50, fours = fours + 7, sixes = sixes + 2 WHERE player_id = 76;
-UPDATE bowling_stats SET matches_played = matches_played + 1, overs_bowled = overs_bowled + 4.0, runs_conceded = runs_conceded + 26, wickets = wickets + 3 WHERE player_id = 79;
+-- RR players
+(106, 24, 723, 534, 76, 26, 5, 1),  -- Sanju Samson
+(107, 20, 612, 423, 68, 24, 4, 0),  -- Jos Buttler
+(108, 22, 634, 478, 82, 14, 4, 1),  -- Yashasvi Jaiswal
+(109, 21, 389, 289, 34, 18, 1, 0),  -- Riyan Parag
 
--- Match 4: PBKS (team7) vs RR (team8) - match_id 4
-INSERT INTO player_match_stats (match_id, player_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings)
-VALUES
-(4, 91, 44, 30, 4, 1, 0, 0.0, 0, 0, 0, 0),  -- Sam Curran 44
-(4, 106, 88, 52, 10, 4, 0, 0.0, 0, 0, 0, 0),-- Sanju Samson 88
-(4, 110, 2, 4, 0, 0, 3, 4.0, 35, 0, 0, 0);   -- Trent Boult 3 wickets
+-- SRH players
+(136, 23, 678, 523, 72, 20, 4, 1),  -- Aiden Markram
+(138, 21, 589, 398, 56, 28, 3, 0),  -- Heinrich Klaasen
+(139, 22, 512, 356, 48, 24, 2, 0),  -- Abhishek Sharma
+(140, 20, 445, 378, 54, 12, 2, 0),  -- Mayank Agarwal
+(148, 19, 367, 289, 42, 16, 1, 0);  -- Rahul Tripathi
 
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 44, balls_faced = balls_faced + 30, fours = fours + 4, sixes = sixes + 1 WHERE player_id = 91;
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 88, balls_faced = balls_faced + 52, fours = fours + 10, sixes = sixes + 4 WHERE player_id = 106;
-UPDATE bowling_stats SET matches_played = matches_played + 1, overs_bowled = overs_bowled + 4.0, runs_conceded = runs_conceded + 35, wickets = wickets + 3 WHERE player_id = 110;
+-- Sample Bowling Stats
+INSERT INTO bowling_stats (player_id, matches_played, overs_bowled, runs_conceded, wickets) VALUES
+-- Bowlers and All-rounders
+(79, 26, 98.4, 743, 32),   -- Jasprit Bumrah
+(35, 24, 94.2, 812, 28),   -- Mohammed Shami
+(34, 23, 89.3, 723, 31),   -- Rashid Khan
+(23, 22, 86.1, 698, 26),   -- Kagiso Rabada
+(110, 21, 82.4, 634, 24),  -- Trent Boult
+(137, 24, 91.2, 756, 29),  -- Pat Cummins
+(21, 20, 78.3, 589, 22),   -- Anrich Nortje
+(63, 19, 74.2, 567, 21),   -- Mark Wood
+(131, 23, 88.4, 698, 25),  -- Josh Hazlewood
+(127, 25, 95.3, 789, 27),  -- Mohammed Siraj
+(19, 24, 92.1, 743, 28),   -- Kuldeep Yadav
+(51, 22, 84.2, 656, 24),   -- Varun Chakravarthy
+(118, 23, 88.3, 712, 26),  -- Yuzvendra Chahal
+(99, 21, 80.1, 623, 23),   -- Rahul Chahar
+(129, 20, 76.4, 578, 22),  -- Wanindu Hasaranga
+-- All-rounders bowling
+(11, 24, 45.2, 389, 18),   -- Ravindra Jadeja
+(22, 24, 48.3, 412, 16),   -- Axar Patel
+(48, 20, 32.1, 298, 14),   -- Andre Russell
+(31, 22, 38.4, 334, 15),   -- Hardik Pandya
+(91, 23, 42.2, 356, 17),   -- Sam Curran
+(5, 18, 34.1, 289, 12),    -- Moeen Ali
+(64, 22, 28.3, 234, 11),   -- Marcus Stoinis
+(123, 23, 31.2, 267, 13),  -- Glenn Maxwell
+(119, 22, 44.1, 378, 16),  -- Ravichandran Ashwin
+(145, 20, 38.2, 312, 14);  -- Washington Sundar
 
--- Match 5: RCB (team9) vs SRH (team10) - match_id 5
-INSERT INTO player_match_stats (match_id, player_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings)
-VALUES
-(5, 121, 55, 40, 6, 1, 0, 0.0, 0, 0, 0, 0), -- Faf du Plessis 55
-(5, 122, 85, 54, 9, 3, 0, 0.0, 0, 1, 0, 0), -- Virat Kohli 85
-(5, 136, 10, 7, 1, 0, 1, 4.0, 40, 0, 0, 0); -- Aiden Markram 1 wicket (occasional bowling)
+-- Sample Fielding Stats
+INSERT INTO fielding_stats (player_id, matches_played, catches, run_outs, stumpings) VALUES
+-- Wicketkeepers
+(1, 25, 18, 3, 8),    -- MS Dhoni
+(16, 23, 21, 2, 6),   -- Rishabh Pant
+(77, 24, 19, 1, 4),   -- Ishan Kishan
+(106, 24, 23, 4, 7),  -- Sanju Samson
+(125, 22, 16, 2, 5),  -- Dinesh Karthik
+(62, 21, 17, 3, 2),   -- Quinton de Kock
+(138, 21, 20, 2, 3),  -- Heinrich Klaasen
+(33, 19, 14, 1, 4),   -- Wriddhiman Saha
+(93, 19, 15, 2, 2),   -- Jonny Bairstow
+(70, 20, 18, 3, 3),   -- Nicholas Pooran
 
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 55, balls_faced = balls_faced + 40, fours = fours + 6, sixes = sixes + 1 WHERE player_id = 121;
-UPDATE batting_stats SET matches_played = matches_played + 1, runs_scored = runs_scored + 85, balls_faced = balls_faced + 54, fours = fours + 9, sixes = sixes + 3 WHERE player_id = 122;
-UPDATE bowling_stats SET matches_played = matches_played + 1, overs_bowled = overs_bowled + 4.0, runs_conceded = runs_conceded + 40, wickets = wickets + 1 WHERE player_id = 136;
+-- Fielders (non-wicketkeepers)
+(122, 27, 24, 6, 0),  -- Virat Kohli
+(76, 28, 22, 4, 0),   -- Rohit Sharma
+(32, 24, 19, 5, 0),   -- Shubman Gill
+(2, 22, 16, 3, 0),    -- Ruturaj Gaikwad
+(46, 24, 18, 4, 0),   -- Shreyas Iyer
+(61, 25, 20, 5, 0),   -- KL Rahul
+(11, 24, 21, 8, 0),   -- Ravindra Jadeja
+(48, 20, 14, 6, 0),   -- Andre Russell
+(31, 22, 17, 4, 0),   -- Hardik Pandya
+(78, 26, 23, 5, 0),   -- Suryakumar Yadav
+(22, 24, 19, 7, 0),   -- Axar Patel
+(107, 20, 18, 3, 0),  -- Jos Buttler
+(108, 22, 17, 4, 0),  -- Yashasvi Jaiswal
+(121, 25, 21, 4, 0),  -- Faf du Plessis
+(136, 23, 19, 3, 0),  -- Aiden Markram
+(91, 23, 16, 5, 0),   -- Sam Curran
+(18, 18, 15, 2, 0),   -- David Warner
+(123, 23, 18, 4, 0),  -- Glenn Maxwell
+(43, 19, 14, 3, 0),   -- David Miller
+(139, 22, 16, 4, 0),  -- Abhishek Sharma
+(79, 26, 8, 2, 0),    -- Jasprit Bumrah
+(35, 24, 6, 1, 0),    -- Mohammed Shami
+(34, 23, 12, 3, 0),   -- Rashid Khan
+(23, 22, 7, 2, 0),    -- Kagiso Rabada
+(110, 21, 9, 1, 0),   -- Trent Boult
+(137, 24, 8, 2, 0),   -- Pat Cummins
+(127, 25, 9, 3, 0),   -- Mohammed Siraj
+(19, 24, 11, 2, 0),   -- Kuldeep Yadav
+(118, 23, 10, 3, 0),  -- Yuzvendra Chahal
+(51, 22, 12, 4, 0);   -- Varun Chakravarthy
 
--- ----------------------------------------------------------------
--- Done. The script inserted:
---  - 10 teams
---  - 8 venues
---  - 8 umpires
---  - 150 players
---  - team_players mapping for all players
---  - 20 matches
---  - default stats for all players + sample player_match_stats for matches 1..5
--- ----------------------------------------------------------------
+-- Sample Player Match Stats (for a few matches to show variety)
+INSERT INTO player_match_stats (match_id, player_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings) VALUES
+-- Match 1: CSK vs MI
+-- CSK batting
+(1, 2, 45, 34, 6, 1, 0, 0, 0, 0, 0, 0),     -- Ruturaj Gaikwad
+(1, 3, 38, 29, 5, 0, 0, 0, 0, 1, 0, 0),     -- Devon Conway
+(1, 11, 28, 18, 2, 2, 0, 0, 0, 0, 0, 0),    -- Jadeja
+(1, 1, 34, 31, 2, 2, 0, 0, 0, 0, 0, 1),     -- MS Dhoni
+(1, 13, 25, 16, 1, 2, 0, 0, 0, 0, 0, 0),    -- Shivam Dube
+-- CSK bowling
+(1, 11, 0, 0, 0, 0, 2, 4, 32, 0, 0, 0),     -- Jadeja
+(1, 7, 0, 0, 0, 0, 1, 4, 28, 0, 0, 0),      -- Theekshana
+(1, 8, 0, 0, 0, 0, 2, 4, 35, 0, 0, 0),      -- Pathirana
+(1, 14, 0, 0, 0, 0, 1, 4, 42, 0, 0, 0),     -- Simranjeet
+-- MI batting 
+(1, 77, 52, 38, 7, 1, 0, 0, 0, 0, 0, 0),    -- Ishan Kishan
+(1, 76, 41, 33, 5, 1, 0, 0, 0, 1, 0, 0),    -- Rohit Sharma
+(1, 78, 48, 31, 4, 3, 0, 0, 0, 0, 0, 0),    -- Suryakumar
+(1, 82, 32, 22, 2, 2, 0, 0, 0, 0, 0, 0),    -- Green
+-- MI bowling
+(1, 79, 0, 0, 0, 0, 3, 4, 29, 0, 0, 0),     -- Bumrah
+(1, 85, 0, 0, 0, 0, 2, 4, 38, 1, 0, 0),     -- Siraj
+(1, 82, 0, 0, 0, 0, 1, 2, 18, 0, 0, 0),     -- Green
 
+-- Match 2: RCB vs KKR
+-- RCB batting
+(2, 122, 42, 35, 6, 0, 0, 0, 0, 0, 0, 0),   -- Virat Kohli
+(2, 121, 38, 31, 5, 1, 0, 0, 0, 1, 0, 0),   -- Faf
+(2, 123, 35, 22, 2, 3, 0, 0, 0, 0, 0, 0),   -- Maxwell
+(2, 125, 28, 24, 3, 1, 0, 0, 0, 0, 0, 2),   -- DK
+-- RCB bowling
+(2, 127, 0, 0, 0, 0, 2, 4, 34, 0, 0, 0),    -- Siraj
+(2, 129, 0, 0, 0, 0, 3, 4, 31, 1, 0, 0),    -- Hasaranga
+(2, 131, 0, 0, 0, 0, 1, 4, 38, 0, 0, 0),    -- Hazlewood
+-- KKR batting
+(2, 49, 34, 18, 2, 3, 0, 0, 0, 0, 0, 0),    -- Narine
+(2, 46, 48, 39, 6, 1, 0, 0, 0, 0, 0, 0),    -- Shreyas
+(2, 48, 42, 26, 3, 3, 0, 0, 0, 0, 0, 0),    -- Russell
+(2, 54, 35, 28, 4, 1, 0, 0, 0, 1, 0, 0),    -- Rinku
+-- KKR bowling
+(2, 51, 0, 0, 0, 0, 4, 4, 28, 0, 0, 0),     -- Varun
+(2, 49, 0, 0, 0, 0, 2, 4, 35, 0, 0, 0),     -- Narine
+(2, 48, 0, 0, 0, 0, 1, 3, 32, 0, 1, 0),     -- Russell
+
+-- Match 3: GT vs SRH  
+-- GT batting
+(3, 32, 67, 48, 8, 2, 0, 0, 0, 0, 0, 0),    -- Shubman Gill
+(3, 31, 45, 29, 4, 3, 0, 0, 0, 1, 0, 0),    -- Hardik
+(3, 43, 38, 22, 2, 3, 0, 0, 0, 0, 0, 0),    -- Miller
+(3, 36, 28, 21, 3, 1, 0, 0, 0, 0, 0, 0),    -- Tewatia
+-- GT bowling
+(3, 34, 0, 0, 0, 0, 5, 4, 24, 0, 0, 0),     -- Rashid Khan
+(3, 35, 0, 0, 0, 0, 3, 4, 31, 0, 0, 0),     -- Shami
+(3, 31, 0, 0, 0, 0, 1, 2, 22, 0, 0, 0),     -- Hardik
+-- SRH batting
+(3, 136, 34, 28, 4, 1, 0, 0, 0, 0, 0, 0),   -- Markram
+(3, 138, 42, 31, 3, 2, 0, 0, 0, 0, 0, 1),   -- Klaasen
+(3, 139, 28, 22, 3, 1, 0, 0, 0, 0, 0, 0),   -- Abhishek
+(3, 148, 25, 21, 3, 0, 0, 0, 0, 1, 0, 0),   -- Tripathi
+-- SRH bowling
+(3, 137, 0, 0, 0, 0, 2, 4, 38, 0, 0, 0),    -- Cummins
+(3, 144, 0, 0, 0, 0, 1, 4, 45, 0, 0, 0),    -- Umran Malik
+(3, 141, 0, 0, 0, 0, 1, 4, 42, 1, 0, 0),    -- Bhuvi
+
+-- Match 4: DC vs PBKS
+-- DC batting
+(4, 16, 38, 32, 4, 1, 0, 0, 0, 0, 0, 1),    -- Pant
+(4, 18, 42, 35, 6, 0, 0, 0, 0, 0, 0, 0),    -- Warner
+(4, 22, 28, 24, 3, 1, 0, 0, 0, 1, 0, 0),    -- Axar
+(4, 20, 25, 18, 1, 2, 0, 0, 0, 0, 0, 0),    -- Powell
+-- DC bowling
+(4, 19, 0, 0, 0, 0, 3, 4, 32, 0, 0, 0),     -- Kuldeep
+(4, 23, 0, 0, 0, 0, 2, 4, 34, 0, 0, 0),     -- Rabada
+(4, 22, 0, 0, 0, 0, 2, 4, 28, 0, 0, 0),     -- Axar
+-- PBKS batting
+(4, 92, 45, 38, 6, 1, 0, 0, 0, 0, 0, 0),    -- Dhawan
+(4, 93, 38, 29, 5, 1, 0, 0, 0, 0, 0, 0),    -- Bairstow
+(4, 94, 32, 21, 2, 2, 0, 0, 0, 1, 0, 0),    -- Livingstone
+(4, 91, 28, 22, 3, 1, 0, 0, 0, 0, 0, 0),    -- Curran
+-- PBKS bowling
+(4, 95, 0, 0, 0, 0, 4, 4, 28, 0, 0, 0),     -- Shami
+(4, 91, 0, 0, 0, 0, 2, 4, 35, 0, 0, 0),     -- Curran
+(4, 99, 0, 0, 0, 0, 2, 4, 31, 1, 0, 0);     -- Chahar
