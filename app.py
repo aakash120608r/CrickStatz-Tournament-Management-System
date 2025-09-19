@@ -93,7 +93,8 @@ def choose_enum(prompt, allowed):
             return v
         print(Fore.RED + f"Invalid. Choose one of: {', '.join(allowed)}")
 
-# add records functions
+
+#add records functions
 def add_team():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- ADD TEAM ---")
 
@@ -322,7 +323,7 @@ def add_player_stats():
     print()
 
 # view records functions
-def view_teams():
+def view_all_teams():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- TEAMS ---")
     cursor.execute('SELECT * FROM teams')
     rows = cursor.fetchall()
@@ -333,7 +334,41 @@ def view_teams():
 
     print()
 
-def view_players():
+def view_team():
+    team_id = get_int('Enter Team ID to view: ')
+    cursor.execute('SELECT * FROM teams WHERE team_id = %s',(team_id,))
+    team = cursor.fetchone()
+    if not team:
+        print(Fore.RED + "Team not found.\n")
+        return
+
+    print(Fore.YELLOW + Style.BRIGHT + f"\n--- TEAM DETAILS (ID: {team_id}) ---")
+    print(f"Name: {team[1]}")
+    print(f"Captain: {team[2]}")
+    print(f"Coach: {team[3]}")
+    print(f"Home Ground: {team[4]}")
+
+    # Fetch and display players in the team
+    cursor.execute("""
+        SELECT p.player_id, p.name, p.age, p.role, p.batting_style, p.bowling_style
+        FROM players p
+        JOIN team_players tp ON p.player_id = tp.player_id
+        WHERE tp.team_id = %s
+    """, (team_id,))
+    players = cursor.fetchall()
+
+    if players:
+        print(Fore.CYAN + "\n--- PLAYERS IN TEAM ---")
+        player_table = PrettyTable(['ID', 'Name', 'Age', 'Role', 'Batting Style', 'Bowling Style'])
+        for player in players:
+            player_table.add_row(player)
+        print(player_table)
+    else:
+        print(Fore.YELLOW + "No players found in this team.")
+
+    print()
+
+def view_all_players():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- PLAYERS ---")
     cursor.execute('SELECT * FROM players')
     rows = cursor.fetchall()
@@ -341,6 +376,41 @@ def view_players():
     for row in rows:    
         table.add_row(row)
     print(table)
+
+    print()
+
+def view_player():
+    player_id = get_int('Enter Player ID to view: ')
+    cursor.execute('SELECT * FROM players WHERE player_id = %s', (player_id,))
+    player = cursor.fetchone()
+    if not player:
+        print(Fore.RED + "Player not found.\n")
+        return
+
+    print(Fore.YELLOW + Style.BRIGHT + f"\n--- PLAYER DETAILS (ID: {player_id}) ---")
+    print(f"Name: {player[1]}")
+    print(f"Age: {player[2]}")
+    print(f"Role: {player[3]}")
+    print(f"Batting Style: {player[4]}")
+    print(f"Bowling Style: {player[5]}")
+
+    # Fetch and display teams the player has played for
+    cursor.execute("""
+        SELECT t.team_id, t.name, tp.contract_start, tp.contract_end
+        FROM teams t
+        JOIN team_players tp ON t.team_id = tp.team_id
+        WHERE tp.player_id = %s
+    """, (player_id,))
+    teams = cursor.fetchall()
+
+    if teams:
+        print(Fore.CYAN + "\n--- TEAMS PLAYER HAS PLAYED FOR ---")
+        team_table = PrettyTable(['Team ID', 'Team Name', 'Contract Start', 'Contract End'])
+        for team in teams:
+            team_table.add_row(team)
+        print(team_table)
+    else:
+        print(Fore.YELLOW + "This player has not played for any team.")
 
     print()
 
@@ -366,7 +436,7 @@ def view_umpires():
 
     print()
 
-def view_matches():
+def view_all_matches():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- MATCHES ---")
     cursor.execute('SELECT * FROM matches')
     rows = cursor.fetchall()
@@ -377,7 +447,44 @@ def view_matches():
 
     print()
 
-def view_batting_stats():
+def view_match():
+    match_id = get_int('Enter Match ID to view: ')
+    cursor.execute('SELECT * FROM matches WHERE match_id = %s', (match_id,))
+    match = cursor.fetchone()
+    if not match:
+        print(Fore.RED + "Match not found.\n")
+        return
+
+    print(Fore.YELLOW + Style.BRIGHT + f"\n--- MATCH DETAILS (ID: {match_id}) ---")
+    
+    cursor.execute('SELECT name FROM teams WHERE team_id = %s', (match[1],))
+    team1_name = cursor.fetchone()[0]
+    cursor.execute('SELECT name FROM teams WHERE team_id = %s', (match[2],))
+    team2_name = cursor.fetchone()[0]
+    cursor.execute('SELECT name FROM venues WHERE venue_id = %s', (match[3],))
+    venue_name = cursor.fetchone()[0]
+    cursor.execute('SELECT name FROM umpires WHERE umpire_id = %s', (match[4],))
+    umpire_name = cursor.fetchone()[0]
+
+    if team1_name or team2_name or venue_name or umpire_name is None:
+        print(Fore.RED + "Error fetching related details. Some IDs may be invalid.")
+        return
+
+    print(f"Team 1: {team1_name} (ID: {match[1]})")
+    print(f"Team 2: {team2_name} (ID: {match[2]})")
+    print(f"Venue: {venue_name} (ID: {match[3]})")
+    print(f"Umpire: {umpire_name} (ID: {match[4]})")
+    print(f"Date: {match[5]}")
+    print(f"Toss Winner: {'Team 1' if match[6] == match[1] else 'Team 2'} (ID: {match[6]})")
+    print(f"Toss Decision: {match[7]}")
+    print(f"Team 1 Score: {match[8]}/{match[10]}")
+    print(f"Team 2 Score: {match[9]}/{match[11]}")
+    print(f"Match Result: {match[12]}")
+    print(f"Weather: {match[13]}")
+
+    print()
+
+def view_all_batting_stats():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- BATTING STATS ---")
     cursor.execute('SELECT * FROM batting_stats')
     rows = cursor.fetchall()
@@ -388,7 +495,27 @@ def view_batting_stats():
 
     print()
 
-def view_bowling_stats():
+def view_batting_stats():
+    player_id = get_int('Enter Player ID to view batting stats: ')
+    cursor.execute('SELECT * FROM batting_stats WHERE player_id = %s', (player_id,))
+    stats = cursor.fetchone()
+    if not stats:
+        print(Fore.RED + "Batting stats not found for this player.\n")
+        return
+
+    print(Fore.YELLOW + Style.BRIGHT + f"\n--- BATTING STATS (Player ID: {player_id}) ---")
+    print(f"Matches Played: {stats[1]}")
+    print(f"Runs Scored: {stats[2]}")
+    print(f"Balls Faced: {stats[3]}")
+    print(f"Strike Rate: {stats[4]:.2f}")
+    print(f"Fours: {stats[5]}")
+    print(f"Sixes: {stats[6]}")
+    print(f"Fifties: {stats[7]}")
+    print(f"Hundreds: {stats[8]}")
+
+    print()
+
+def view_all_bowling_stats():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- BOWLING STATS ---")
     cursor.execute('SELECT * FROM bowling_stats')
     rows = cursor.fetchall()
@@ -399,7 +526,24 @@ def view_bowling_stats():
 
     print()
 
-def view_fielding_stats():
+def view_bowling_stats():
+    player_id = get_int('Enter Player ID to view bowling stats: ')
+    cursor.execute('SELECT * FROM bowling_stats WHERE player_id = %s', (player_id,))
+    stats = cursor.fetchone()
+    if not stats:
+        print(Fore.RED + "Bowling stats not found for this player.\n")
+        return
+
+    print(Fore.YELLOW + Style.BRIGHT + f"\n--- BOWLING STATS (Player ID: {player_id}) ---")
+    print(f"Matches Played: {stats[1]}")
+    print(f"Overs Bowled: {stats[2]}")
+    print(f"Runs Conceded: {stats[3]}")
+    print(f"Economy Rate: {stats[4]:.2f}")
+    print(f"Wickets Taken: {stats[5]}")
+
+    print()
+
+def view_all_fielding_stats():
     print(Fore.YELLOW + Style.BRIGHT + "\n--- FIELDING STATS ---")
     cursor.execute('SELECT * FROM fielding_stats')
     rows = cursor.fetchall()
@@ -410,17 +554,76 @@ def view_fielding_stats():
 
     print()
 
-def view_player_match_stats():
-    cursor.execute("""
-        SELECT player_id, match_id, runs_scored, balls_faced, fours, sixes, wickets, overs_bowled, runs_conceded, catches, run_outs, stumpings
-        FROM player_match_stats
-    """)
-    rows = cursor.fetchall()
-    table = PrettyTable(['Player ID', 'Match ID', 'Runs Scored', 'Balls Faced', 'Fours', 'Sixes', 'Wickets Taken', 'Overs Bowled', 'Runs Conceded', 'Catches', 'Run Outs', 'Stumpings'])
-    for row in rows:
-        table.add_row(row)
-    print(table)
+def view_fielding_stats():
+    player_id = get_int('Enter Player ID to view fielding stats: ')
+    cursor.execute('SELECT * FROM fielding_stats WHERE player_id = %s', (player_id,))
+    stats = cursor.fetchone()
+    if not stats:
+        print(Fore.RED + "Fielding stats not found for this player.\n")
+        return
 
+    print(Fore.YELLOW + Style.BRIGHT + f"\n--- FIELDING STATS (Player ID: {player_id}) ---")
+    print(f"Matches Played: {stats[1]}")
+    print(f"Catches: {stats[2]}")
+    print(f"Run Outs: {stats[3]}")
+    print(f"Stumpings: {stats[4]}")
+
+    print()
+
+def view_player_match_stats():
+    print(Fore.YELLOW + Style.BRIGHT + "\n--- VIEW PLAYER MATCH STATS ---")
+    choice = get_int('View by (1) Player ID, (2) Match ID, (3) Both Player & Match ID (1/2/3): ')
+    if choice == 1:
+        player_id = get_int('Enter Player ID to view match stats: ')
+        cursor.execute('SELECT * FROM player_match_stats WHERE player_id = %s', (player_id,))
+        rows = cursor.fetchall()
+        if not rows:
+            print(Fore.RED + "No match stats found for this player.\n")
+            return
+        print(Fore.YELLOW + Style.BRIGHT + f"\n--- PLAYER MATCH STATS (Player ID: {player_id}) ---")
+        table = PrettyTable(['Match ID', 'Runs Scored', 'Balls Faced', 'Fours', 'Sixes', 'Wickets', 'Overs Bowled', 'Runs Conceded', 'Catches', 'Run Outs', 'Stumpings'])
+        for row in rows:
+            table.add_row([row[0]] + list(row[2:]))
+        print(table)
+
+    elif choice == 2:
+        match_id = get_int('Enter Match ID to view player stats: ')
+        cursor.execute('SELECT * FROM player_match_stats WHERE match_id = %s', (match_id,))
+        rows = cursor.fetchall()
+        if not rows:
+            print(Fore.RED + "No player stats found for this match.\n")
+            return
+        print(Fore.YELLOW + Style.BRIGHT + f"\n--- PLAYER MATCH STATS (Match ID: {match_id}) ---")
+        table = PrettyTable(['Player ID', 'Runs Scored', 'Balls Faced', 'Fours', 'Sixes', 'Wickets', 'Overs Bowled', 'Runs Conceded', 'Catches', 'Run Outs', 'Stumpings'])
+        for row in rows:
+            table.add_row([row[1]] + list(row[2:]))
+        print(table)
+
+    elif choice == 3:
+        player_id = get_int('Enter Player ID: ')
+        match_id = get_int('Enter Match ID: ')
+        cursor.execute('SELECT * FROM player_match_stats WHERE player_id = %s AND match_id = %s', (player_id, match_id))
+        stats = cursor.fetchone()
+        if not stats:
+            print(Fore.RED + "No stats found for this player in this match.\n")
+            return
+        print(Fore.YELLOW + Style.BRIGHT + f"\n--- PLAYER MATCH STATS (Player ID: {player_id}, Match ID: {match_id}) ---")
+
+        print(f"Runs Scored: {stats[2]}")
+        print(f"Balls Faced: {stats[3]}")
+        print(f"Fours: {stats[4]}")
+        print(f"Sixes: {stats[5]}")
+        print(f"Wickets: {stats[6]}")
+        print(f"Overs Bowled: {stats[7]}")
+        print(f"Runs Conceded: {stats[8]}")
+        print(f"Catches: {stats[9]}")
+        print(f"Run Outs: {stats[10]}")
+        print(f"Stumpings: {stats[11]}")
+
+    else:
+        print(Fore.RED + "Invalid choice.\n")
+        return
+    
     print()
 
 # data export to CSV
@@ -578,21 +781,57 @@ def main_menu():
         sub_choice = input(Fore.WHITE + "Enter your choice (a-i): " + Fore.WHITE).lower()
         print()
         if sub_choice == 'a':
-            view_teams()
+            team_choice = get_int("View (1) All Teams or (2) Specific Team by ID? (1/2): ")
+            if team_choice == 1:
+                view_all_teams()
+            elif team_choice == 2:
+                view_team()
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
         elif sub_choice == 'b':
-            view_players()
+            player_choice = get_int("View (1) All Players or (2) Specific Player by ID? (1/2): ")
+            if player_choice == 1:
+                view_all_players()
+            elif player_choice == 2:
+                view_player()
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
         elif sub_choice == 'c':
             view_venues()
         elif sub_choice == 'd':
             view_umpires()
         elif sub_choice == 'e':
-            view_matches()
+            match_choice = get_int("View (1) All Matches or (2) Specific Match by ID? (1/2): ")
+            if match_choice == 1:
+                view_all_matches()
+            elif match_choice == 2:
+                view_match()
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
         elif sub_choice == 'f':
-            view_batting_stats()
+            batting_choice = get_int("View (1) All Batting Stats or (2) Specific Player by ID? (1/2): ")
+            if batting_choice == 1:
+                view_all_batting_stats()
+            elif batting_choice == 2:
+                view_batting_stats()
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
         elif sub_choice == 'g':
-            view_bowling_stats()
+            bowling_choice = get_int("View (1) All Bowling Stats or (2) Specific Player by ID? (1/2): ")
+            if bowling_choice == 1:
+                view_all_bowling_stats()
+            elif bowling_choice == 2:
+                view_bowling_stats()
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
         elif sub_choice == 'h':
-            view_fielding_stats()
+            fielding_choice = get_int("View (1) All Fielding Stats or (2) Specific Player by ID? (1/2): ")
+            if fielding_choice == 1:
+                view_all_fielding_stats()
+            elif fielding_choice == 2:
+                view_fielding_stats()
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
         elif sub_choice == 'i':
             view_player_match_stats()
         else:
