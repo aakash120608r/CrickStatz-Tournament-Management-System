@@ -50,7 +50,13 @@ cursor=conn.cursor()
 print()
 print(Fore.YELLOW + "Initializing database tables...")
 
-with open("database.sql", "r") as f:
+# Ensure we open database.sql relative to this script's directory
+script_dir = os.path.dirname(os.path.realpath(__file__))
+db_path = os.path.join(script_dir, "database.sql")
+if not os.path.exists(db_path):
+    print(Fore.RED + f"database.sql not found at: {db_path}")
+    raise FileNotFoundError(f"database.sql not found at: {db_path}")
+with open(db_path, "r") as f:
     sql_file = f.read()
 
 for statement in sql_file.split(';'):
