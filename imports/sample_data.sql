@@ -2104,139 +2104,109 @@ INSERT INTO player_match_stats (
         run_outs,
         stumpings
     )
-VALUES -- Player match stats (Match 1: CSK vs MI)
-    -- CSK batting (player match stats)
+VALUES -- Match 1: CSK vs MI
     (1, 2, 45, 34, 6, 1, 0, 0, 0, 0, 0, 0),
     -- Ruturaj Gaikwad
     (1, 3, 38, 29, 5, 0, 0, 0, 0, 1, 0, 0),
     -- Devon Conway
-    (1, 11, 28, 18, 2, 2, 0, 0, 0, 0, 0, 0),
-    -- Jadeja
+    (1, 11, 28, 18, 2, 2, 2, 4, 32, 0, 0, 0),
+    -- Ravindra Jadeja
     (1, 1, 34, 31, 2, 2, 0, 0, 0, 0, 0, 1),
     -- MS Dhoni
     (1, 13, 25, 16, 1, 2, 0, 0, 0, 0, 0, 0),
     -- Shivam Dube
-    -- CSK bowling
-    -- Jadeja (combined batting+bowling)
-    (1, 11, 28, 18, 2, 2, 2, 4, 32, 0, 0, 0),
     (1, 7, 0, 0, 0, 0, 1, 4, 28, 0, 0, 0),
-    -- Theekshana
+    -- Maheesh Theekshana
     (1, 8, 0, 0, 0, 0, 2, 4, 35, 0, 0, 0),
-    -- Pathirana
+    -- Matheesha Pathirana
     (1, 14, 0, 0, 0, 0, 1, 4, 42, 0, 0, 0),
-    -- Simranjeet
-    -- MI batting 
+    -- Simranjeet Singh
     (1, 77, 52, 38, 7, 1, 0, 0, 0, 0, 0, 0),
     -- Ishan Kishan
     (1, 76, 41, 33, 5, 1, 0, 0, 0, 1, 0, 0),
     -- Rohit Sharma
     (1, 78, 48, 31, 4, 3, 0, 0, 0, 0, 0, 0),
-    -- Suryakumar
-    (1, 82, 32, 22, 2, 2, 0, 0, 0, 0, 0, 0),
-    -- Green
-    -- MI bowling
+    -- Suryakumar Yadav
+    (1, 82, 32, 22, 2, 2, 1, 2, 18, 0, 0, 0),
+    -- Cameron Green
     (1, 79, 0, 0, 0, 0, 3, 4, 29, 0, 0, 0),
-    -- Bumrah
+    -- Jasprit Bumrah
     (1, 85, 0, 0, 0, 0, 2, 4, 38, 1, 0, 0),
-    -- Siraj
-    (1, 82, 0, 0, 0, 0, 1, 2, 18, 0, 0, 0),
-    -- Green
-    -- Player Match 2: RCB vs KKR
-    -- RCB batting
+    -- Mohammed Siraj
+    -- Match 2: RCB vs KKR
     (2, 122, 42, 35, 6, 0, 0, 0, 0, 0, 0, 0),
     -- Virat Kohli
     (2, 121, 38, 31, 5, 1, 0, 0, 0, 1, 0, 0),
-    -- Faf
+    -- Faf du Plessis
     (2, 123, 35, 22, 2, 3, 0, 0, 0, 0, 0, 0),
-    -- Maxwell
+    -- Glenn Maxwell
     (2, 125, 28, 24, 3, 1, 0, 0, 0, 0, 0, 2),
-    -- DK
-    -- RCB bowling
+    -- Dinesh Karthik
     (2, 127, 0, 0, 0, 0, 2, 4, 34, 0, 0, 0),
-    -- Siraj
+    -- Mohammed Siraj
     (2, 129, 0, 0, 0, 0, 3, 4, 31, 1, 0, 0),
-    -- Hasaranga
+    -- Wanindu Hasaranga
     (2, 131, 0, 0, 0, 0, 1, 4, 38, 0, 0, 0),
-    -- Hazlewood
-    -- KKR batting
-    (2, 49, 34, 18, 2, 3, 0, 0, 0, 0, 0, 0),
-    -- Narine
+    -- Josh Hazlewood
+    (2, 49, 34, 18, 2, 3, 2, 4, 35, 0, 0, 0),
+    -- Sunil Narine  
     (2, 46, 48, 39, 6, 1, 0, 0, 0, 0, 0, 0),
-    -- Shreyas
-    (2, 48, 42, 26, 3, 3, 0, 0, 0, 0, 0, 0),
-    -- Russell
+    -- Shreyas Iyer
+    (2, 48, 42, 26, 3, 3, 1, 3, 32, 0, 1, 0),
+    -- Andre Russell  
     (2, 54, 35, 28, 4, 1, 0, 0, 0, 1, 0, 0),
-    -- Rinku
-    -- KKR bowling
+    -- Rinku Singh
     (2, 51, 0, 0, 0, 0, 4, 4, 28, 0, 0, 0),
-    -- Varun
-    (2, 49, 0, 0, 0, 0, 2, 4, 35, 0, 0, 0),
-    -- Narine
-    (2, 48, 0, 0, 0, 0, 1, 3, 32, 0, 1, 0),
-    -- Russell
-    -- Player Match 3: GT vs SRH  
-    -- GT batting
+    -- Varun Chakravarthy
+    -- Match 3: GT vs SRH  
     (3, 32, 67, 48, 8, 2, 0, 0, 0, 0, 0, 0),
     -- Shubman Gill
-    (3, 31, 45, 29, 4, 3, 0, 0, 0, 1, 0, 0),
-    -- Hardik
+    (3, 31, 45, 29, 4, 3, 1, 2, 22, 1, 0, 0),
+    -- Hardik Pandya  
     (3, 43, 38, 22, 2, 3, 0, 0, 0, 0, 0, 0),
-    -- Miller
+    -- David Miller
     (3, 36, 28, 21, 3, 1, 0, 0, 0, 0, 0, 0),
-    -- Tewatia
-    -- GT bowling
+    -- Rahul Tewatia
     (3, 34, 0, 0, 0, 0, 5, 4, 24, 0, 0, 0),
     -- Rashid Khan
     (3, 35, 0, 0, 0, 0, 3, 4, 31, 0, 0, 0),
-    -- Shami
-    (3, 31, 0, 0, 0, 0, 1, 2, 22, 0, 0, 0),
-    -- Hardik
-    -- SRH batting
+    -- Mohammed Shami
     (3, 136, 34, 28, 4, 1, 0, 0, 0, 0, 0, 0),
-    -- Markram
+    -- Aiden Markram
     (3, 138, 42, 31, 3, 2, 0, 0, 0, 0, 0, 1),
-    -- Klaasen
+    -- Heinrich Klaasen
     (3, 139, 28, 22, 3, 1, 0, 0, 0, 0, 0, 0),
-    -- Abhishek
+    -- Abhishek Sharma
     (3, 148, 25, 21, 3, 0, 0, 0, 0, 1, 0, 0),
-    -- Tripathi
-    -- SRH bowling
+    -- Rahul Tripathi
     (3, 137, 0, 0, 0, 0, 2, 4, 38, 0, 0, 0),
-    -- Cummins
+    -- Pat Cummins
     (3, 144, 0, 0, 0, 0, 1, 4, 45, 0, 0, 0),
     -- Umran Malik
     (3, 141, 0, 0, 0, 0, 1, 4, 42, 1, 0, 0),
-    -- Bhuvi
-    -- Player Match 4: DC vs PBKS
-    -- DC batting
+    -- Bhuvneshwar Kumar
+    -- Match 4: DC vs PBKS
     (4, 16, 38, 32, 4, 1, 0, 0, 0, 0, 0, 1),
-    -- Pant
+    -- Rishabh Pant
     (4, 18, 42, 35, 6, 0, 0, 0, 0, 0, 0, 0),
-    -- Warner
-    (4, 22, 28, 24, 3, 1, 0, 0, 0, 1, 0, 0),
-    -- Axar
+    -- David Warner
+    (4, 22, 28, 24, 3, 1, 2, 4, 28, 1, 0, 0),
+    -- Axar Patel  
     (4, 20, 25, 18, 1, 2, 0, 0, 0, 0, 0, 0),
-    -- Powell
-    -- DC bowling
+    -- Rovman Powell
     (4, 19, 0, 0, 0, 0, 3, 4, 32, 0, 0, 0),
-    -- Kuldeep
+    -- Kuldeep Yadav
     (4, 23, 0, 0, 0, 0, 2, 4, 34, 0, 0, 0),
-    -- Rabada
-    (4, 22, 0, 0, 0, 0, 2, 4, 28, 0, 0, 0),
-    -- Axar
-    -- PBKS batting
+    -- Kagiso Rabada
     (4, 92, 45, 38, 6, 1, 0, 0, 0, 0, 0, 0),
-    -- Dhawan
+    -- Shikhar Dhawan
     (4, 93, 38, 29, 5, 1, 0, 0, 0, 0, 0, 0),
-    -- Bairstow
+    -- Jonny Bairstow
     (4, 94, 32, 21, 2, 2, 0, 0, 0, 1, 0, 0),
-    -- Livingstone
-    (4, 91, 28, 22, 3, 1, 0, 0, 0, 0, 0, 0),
-    -- Curran
-    -- PBKS bowling
+    -- Liam Livingstone
+    (4, 91, 28, 22, 3, 1, 2, 4, 35, 0, 0, 0),
+    -- Sam Curran  
     (4, 95, 0, 0, 0, 0, 4, 4, 28, 0, 0, 0),
-    -- Shami
-    (4, 91, 0, 0, 0, 0, 2, 4, 35, 0, 0, 0),
-    -- Curran
+    -- Mohammed Shami
     (4, 99, 0, 0, 0, 0, 2, 4, 31, 1, 0, 0);
--- Chahar
+-- Rahul Chahar
