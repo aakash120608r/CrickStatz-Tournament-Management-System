@@ -1,0 +1,10 @@
+Referential check report for imports/sample_data.sql
+Declared counts:
+  players: 150
+  teams: 10
+  venues: 8
+  umpires: 8
+  matches: 20
+
+Reference checks:
+  No missing references detected.
